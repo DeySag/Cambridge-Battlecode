@@ -5,7 +5,7 @@ These notes summarize the two organiser documents supplied by the user for event
 - `GameRules.md`: complete game rules and champion specifications.
 - `BotAPICpp.md`: full C++ API export, signatures, semantics and illustrative fragments.
 - `API-index.txt`: generated list of API signatures and their primary descriptions, grouped by namespace/type. Omits illustrative fragments and repetitive usage prompts; consult the original for full context.
-- Existing checkout: `/workspace/Cambridge-Battlecode`, SDK version 2.1.5 in `cambc.toml`. Document event identity alone does not prove every numeric rule matches this runtime. Record conflicts and verify relevant SDK metadata or a targeted runner experiment before relying on them. No mechanic experiments were performed during this reading task.
+- Existing checkout: `/workspace/Cambridge-Battlecode`. The initial reading used SDK 2.1.5; the user subsequently updated the checkout to SDK **2.2.5** (`42d945e`, including `2ef55c7`). Document event identity alone does not prove every numeric rule matches this runtime. Record conflicts and verify relevant SDK metadata or a targeted runner experiment before relying on them. No mechanic experiments were performed during the initial reading; subsequent bot development verified current camp ranges and full-match behavior as described below.
 
 ## Objective and economy
 
@@ -139,3 +139,11 @@ Optimize safe tribute throughput across the whole resource pipeline. Include wal
 Reserve enough fuel for actions and yielding. Prefer engine geometry and reusable masks over expensive per-turn recomputation. Re-evaluate action budgets after resets, movement, casts and channels. Evaluate spells against target count, effective damage, retaliation avoided, and the walking opportunity cost. Prism's carried-gem Focus bonus creates a real scoring-versus-temporary-power tradeoff, not an automatic reason to hoard.
 
 Any champion ranking, build order or proposed strategic improvement should be labelled a hypothesis until measured in full matches on multiple maps and both sides. The earlier environment smoke matches establish runtime functionality, not strategy strength.
+
+## SDK 2.2.5 follow-up
+
+The supplied documents remain unchanged snapshots. Consult the current checked-in header for additions: `camp::state()` / `is_awake()` / `is_asleep()` / `is_alive()` / `is_dead()`; visibility-independent champion identity (type and team, without hidden position or combat stats); and `bitboard::positions_into()`. Camp states are mutually exclusive: dead 0, awake 1, asleep 2.
+
+The local 2.2.5 engine returned monolith attack range **3** through SDK design queries. Range-four spell farming was then exercised in full matches on `contest`, reaching 1,000 submitted gems. This resolves that range discrepancy for the tested version only. The bot uses awake/asleep observations to avoid treating dormant monsters as active threats during recall.
+
+Use `cambc build ... --release` and `cambc run ... --release` for submission checks. The updated SDK has debug-only fuel-pause helpers; platform builds omit them. The competition bot does not use those helpers for its decisions.

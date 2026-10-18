@@ -1,0 +1,56 @@
+{
+  "sdk_version": "2.2.5",
+  "sdk_commit": "42d945e",
+  "mode": "release",
+  "maps": 17,
+  "source_sha256": {
+    "src/bot.cpp": "af07e7452972f87f0b33bbe61aef5da4221f0aad213e6f6ec494470434567425",
+    "src/bot.h": "1c1d93086c33e75fb8c63c3130e2fc669c5c6c8a7be19810501474ef11761208",
+    "src/draft.cpp": "21d74631bd1e9729ef1dc4ef64aac5e987469e3e014e728f244e575a08d8b66e",
+    "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+    "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
+    "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
+  },
+  "results": [
+    {
+      "label": "final-vs-starter",
+      "wins": 34,
+      "games": 34,
+      "crashes": 0,
+      "caught_errors": 0,
+      "fuel_suspensions": 17,
+      "report": "matches/final-vs-starter/report.json"
+    },
+    {
+      "label": "final-vs-original",
+      "wins": 34,
+      "games": 34,
+      "crashes": 0,
+      "caught_errors": 0,
+      "fuel_suspensions": 21,
+      "report": "matches/final-vs-original/report.json"
+    },
+    {
+      "label": "final-vs-farmer",
+      "wins": 24,
+      "games": 34,
+      "crashes": 0,
+      "caught_errors": 0,
+      "fuel_suspensions": 14,
+      "report": "matches/final-vs-farmer/report.json"
+    }
+  ],
+  "scope": "Local deterministic benchmarks; no tournament win-rate claim.",
+  "bundle_verification": {
+    "games": 4,
+    "wins": 4,
+    "invalid": 0,
+    "maps": [
+      "packs",
+      "contest"
+    ],
+    "mode": "release",
+    "rebuilt_from_extracted_zip": true
+  },
+  "bundle_sha256": "0c00900c5abe1f59c0c95f2feb539ae90b26d4313be8fc1f2c159193ea75d47c"
+}
