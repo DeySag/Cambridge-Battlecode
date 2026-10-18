@@ -1,0 +1,582 @@
+# CAMBC Bot API — C++
+## cambc
+std::vector<cambc::champion> champions() — Get allied and enemy champion handles, including champions outside vision.
+std::vector<cambc::champion> champions(team side) — Get all champion handles on one side, including champions outside vision. @param side Team to include.
+void end_turn() — Yield the authenticated bot's current turn to the host.
+std::uint64_t fuel_remaining() — Get the fuel left in the current turn's budget; the first draft turn gets 10x and each champion's first turn gets 2x.
+std::uint32_t global_submitted_gems(team side) — Get the total gems submitted by a team. @param side Team to count.
+bool is_draft() noexcept — Whether this guest has a draft perspective, without querying the host.
+constexpr team opponent(team side) noexcept — Get the other team. @param side Team to flip.
+void resign() — Resign the game. A successful resign never returns, so buffered output is flushed first.
+std::uint32_t round_number() — Get the current round number.
+cambc::champion& self() — Return this guest's authenticated champion; throws std::bad_optional_access during drafting.
+std::string to_string(ability_kind value) — Get the enumerator name. @param value Value to format.
+std::string to_string(buff_types value) — Get the enumerator name. @param value Value to format.
+std::string to_string(camp_type value) — Get the enumerator name. @param value Value to format.
+std::string to_string(champion_draft value) — Get the enumerator name. @param value Value to format.
+std::string to_string(champion_type value) — Get the enumerator name. @param value Value to format.
+std::string to_string(consumable_type value) — Get the enumerator name. @param value Value to format.
+std::string to_string(error_code value) — Get the enumerator name. @param value Value to format.
+std::string to_string(item_passive value) — Get the enumerator name. @param value Value to format.
+std::string to_string(item_type value) — Get the enumerator name. @param value Value to format.
+std::string to_string(passive_type value) — Get the enumerator name. @param value Value to format.
+std::string to_string(symmetry value) — Get the enumerator name. @param value Value to format.
+std::string to_string(team value) — Get the enumerator name. @param value Value to format.
+std::string to_string(vec2 value) — Format as "(x, y)". @param value Value to format.
+## cambc::ability
+explicit ability(const detail::ability_props& props, std::uint32_t slot) — Copy immutable design metadata.
+bool can_target_allies() const — Check the allowed-target mask for allied champions.
+bool can_target_camps() const — Check target categories, not cast readiness, range or visibility; allies/enemies exclude self.
+bool can_target_enemies() const — Check the allowed-target mask for enemy champions.
+bool can_target_ground() const — Check the allowed-target mask for a tile destination.
+bool can_target_self() const — Check the allowed-target mask for the casting champion.
+std::int32_t cooldown() const — Get the remaining owner turn-end ticks; zero means ready.
+float damage_amount() const — Query damage before absorption/health limits; includes caster items and passives.
+float damage_amount(const champion& target) const — Predict health lost after mitigation and shields, capped at current health. Target must be visible. @param target Visible champion that would be hit.
+template <class T> T get() const — Extract a payload; throws std::bad_optional_access if absent, std::bad_variant_access for a different kind.
+float heal_amount() const — Query heal before absorption/health limits; includes caster items and passives.
+float heal_amount(const champion& target) const — Cap healing at the visible target's missing health. Does not cast or consume resources. @param target Visible champion that would be healed.
+const ability_info& info(ability_kind kind) const — Get selected metadata; unavailable or mismatched payloads throw. @param kind Ability kind the slot must hold.
+const std::optional<ability_info>& info() const — Get constructor-cached ability properties; empty for an unused slot. Rethrow the cached visibility error if the owner could not be inspected at construction.
+bool is(ability_kind kind) const noexcept — Check the kind of constructor-cached ability metadata without querying the host. @param kind Ability kind to test for.
+template <class T> bool is(type_tag_t<T>) const noexcept — Check whether constructor-cached metadata holds the selected payload type.
+bool is_aoe_damage() const noexcept — Check whether this is an area-damage ability.
+bool is_attack_reset() const noexcept — Check whether this is an attack-reset ability.
+bool is_cc() const noexcept — Check whether this is a crowd-control ability.
+bool is_damage() const noexcept — Check whether this is a damage ability.
+bool is_dash() const noexcept — Check whether this is a dash ability.
+bool is_heal() const noexcept — Check whether this is a healing ability.
+bool is_on_cooldown() const — Query whether the live ability has a positive remaining cooldown.
+bool is_ready() const — Check whether this ability is ready to cast.
+bool is_shield() const noexcept — Check whether this is a shield ability.
+void mask_into(bitboard& out) const — Like `valid_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+float shield_amount() const — Query shield before absorption/health limits; includes caster items and passives.
+float shield_amount(const champion& target) const — Query full shield strength for a visible target. Does not cast or consume resources. @param target Visible champion that would be shielded.
+std::uint32_t slot() const noexcept — Return this ability's fixed champion slot index.
+bool use() const — Cast without a target or destination. Returns false for a newly revealed hidden obstruction; known invalid destinations throw.
+bool use(const camp& target) const — Cast on a camp; the cast lands on the target's tile. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param target Camp to cast on.
+bool use(const champion& target) const — Cast on a champion; unit casts land on the target's tile. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param target Champion to cast on.
+bool use(vec2 destination) const — Cast at a ground tile. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param destination Ground tile to cast at.
+ability_target_mask valid_targets() const — Query the engine's live target-category flags.
+bitboard valid_tiles() const — Casting range only; does not filter visibility, occupancy or target categories. Throws for range-less or unused slots, hidden owners, and design-only abilities.
+## cambc::ability_aoe_damage
+friend bool operator==(const ability_aoe_damage&, const ability_aoe_damage&) = default — Compare every field.
+## cambc::ability_attack_reset
+friend bool operator==(const ability_attack_reset&, const ability_attack_reset&) = default — Compare every field.
+## cambc::ability_cc
+friend bool operator==(const ability_cc&, const ability_cc&) = default — Compare every field.
+## cambc::ability_damage
+friend bool operator==(const ability_damage&, const ability_damage&) = default — Compare every field.
+## cambc::ability_dash
+friend bool operator==(const ability_dash&, const ability_dash&) = default — Compare every field.
+## cambc::ability_heal
+friend bool operator==(const ability_heal&, const ability_heal&) = default — Compare every field.
+## cambc::ability_properties
+friend bool operator==(const ability_properties&, const ability_properties&) = default — Compare every field.
+## cambc::ability_shield
+friend bool operator==(const ability_shield&, const ability_shield&) = default — Compare every field.
+## cambc::ability_target_mask
+constexpr ability_target_mask() noexcept = default — Construct a mask with no target categories.
+static constexpr ability_target_mask all() noexcept — Construct a mask with every known flag set.
+constexpr iterator begin() const noexcept — 
+constexpr std::uint32_t bits() const noexcept — Return the underlying engine bit pattern, including unknown flags.
+constexpr bool contains(ability_target_mask flags) const noexcept — Check that all selected bits are present; an empty mask is always contained. @param flags Flags to test.
+static constexpr ability_target_mask empty() noexcept — Construct an empty mask.
+constexpr iterator end() const noexcept — 
+static constexpr std::optional<ability_target_mask> from_bits(std::uint32_t bits) noexcept — Decode raw engine bits, or return nullopt if any bit is not a known flag. @param bits Raw flag bits.
+static constexpr ability_target_mask from_bits_retain(std::uint32_t bits) noexcept — Decode raw engine bits without discarding unknown future flags. @param bits Raw flag bits, kept as is including unnamed bits.
+static constexpr ability_target_mask from_bits_truncate(std::uint32_t bits) noexcept — Decode raw engine bits, discarding unknown flags. @param bits Raw flag bits; unnamed bits are dropped.
+constexpr void insert(ability_target_mask flags) noexcept — Set selected flags. @param flags Flags to set.
+constexpr bool intersects(ability_target_mask flags) const noexcept — Check whether any selected bit is present. @param flags Flags to test.
+constexpr bool is_all() const noexcept — Check whether every known flag is set.
+constexpr bool is_empty() const noexcept — Check whether no bits, known or unknown, are set.
+friend constexpr ability_target_mask operator-(ability_target_mask a, ability_target_mask b) noexcept — Return the flags in a that are not in b.
+constexpr ability_target_mask& operator-=(ability_target_mask flags) noexcept — Remove selected flags.
+friend constexpr ability_target_mask operator&(ability_target_mask a, ability_target_mask b) noexcept — Intersect bitmasks.
+constexpr ability_target_mask& operator&=(ability_target_mask flags) noexcept — Retain only selected flags.
+friend constexpr ability_target_mask operator^(ability_target_mask a, ability_target_mask b) noexcept — Toggle selected bits.
+constexpr ability_target_mask& operator^=(ability_target_mask flags) noexcept — Toggle selected flags.
+friend constexpr bool operator==(ability_target_mask a, ability_target_mask b) noexcept — Compare every bit, including unknown flags.
+friend constexpr ability_target_mask operator|(ability_target_mask a, ability_target_mask b) noexcept — Compose bitmasks without discarding unknown flags.
+constexpr ability_target_mask& operator|=(ability_target_mask flags) noexcept — Insert selected flags.
+friend constexpr ability_target_mask operator~(ability_target_mask value) noexcept — Complement known flags; unknown flags are discarded.
+constexpr void remove(ability_target_mask flags) noexcept — Clear selected flags. @param flags Flags to clear.
+constexpr void set(ability_target_mask flags, bool value) noexcept — Insert selected flags when value is true, otherwise remove them. @param flags Flags to update. @param value `true` to set the flags, `false` to clear them.
+constexpr void toggle(ability_target_mask flags) noexcept — Toggle selected flags. @param flags Flags to flip.
+## cambc::altar_lock
+explicit altar_lock(detail::altar_lock_info value) — Copy a visible altar-lock observation; its fields remain a snapshot.
+std::uint32_t hits_remaining() const noexcept — Get the remaining hits from the captured altar-lock observation.
+bool is_ally() const — Check whether this altar lock belongs to the observing team.
+bool is_enemy() const — Check whether this altar lock belongs to the opposing team.
+friend bool operator==(const altar_lock&, const altar_lock&) = default — Compare every captured field.
+vec2 position() const noexcept — Get the tile captured in this altar-lock observation.
+team team() const — Get the owning team relative to the authenticated bot.
+## cambc::bitboard
+bitboard() — Allocate an empty mask.
+bitboard(bitboard&&) noexcept = default — Transfer board storage without querying the host.
+bitboard(const bitboard& other) — Copy the raw buffer, including padding.
+explicit bitboard(uninitialized_t) — Allocate aligned storage without initialising it.
+void clear() — Clear all storage, including padding bits.
+std::uint32_t count() const — Count set map tiles.
+void draw_chebyshev(vec2 center, float radius) — Add tiles within a Chebyshev radius. @param center Centre tile. @param radius Chebyshev radius in tiles.
+void draw_circle(vec2 center, float radius) — Add tiles within a Euclidean radius. @param center Centre tile. @param radius Euclidean radius in tiles.
+std::vector<std::uint8_t> export_linear_buffer() const — Return a packed row-major copy.
+void export_linear_buffer(std::span<std::uint8_t> bytes) const — Export to a caller-provided row-major buffer. @param bytes Destination with one byte per tile in row-major order, exactly `linear_buffer_size()` long.
+std::vector<std::uint8_t> export_raw_buffer() const — Return a copy of raw storage.
+void export_raw_buffer(std::span<std::uint8_t> bytes) const — Copy raw storage to a caller-provided buffer. @param bytes Destination, exactly `raw_buffer_size()` long.
+void fill() — Set every in-bounds tile bit; padding is handled by the engine.
+std::int32_t height() const — Get the map height in tiles.
+void import_linear_buffer(std::span<const std::uint8_t> bytes) — Import a packed row-major buffer. @param bytes One byte per tile in row-major order, exactly `linear_buffer_size()` long; nonzero sets the tile.
+void import_raw_buffer(std::span<const std::uint8_t> bytes) — Copy an engine-chunked buffer into this object. @param bytes Engine-chunked bytes, exactly `raw_buffer_size()` long.
+bool is_empty() const — Check whether all map tiles are clear.
+bool is_set(vec2 p) const — Read a tile; throws if it is outside the map. @param p Tile to query.
+static std::size_t linear_buffer_size() — Get the size of the packed row-major buffer in bytes.
+friend bitboard operator&(bitboard&& a, const bitboard& b) — Tiles set in both masks, reusing a's storage.
+friend bitboard operator&(const bitboard& a, const bitboard& b) — Tiles set in both masks.
+bitboard& operator&=(const bitboard& b) — Keep only tiles also set in b.
+friend bitboard operator^(bitboard&& a, const bitboard& b) — Tiles set in exactly one mask, reusing a's storage.
+friend bitboard operator^(const bitboard& a, const bitboard& b) — Tiles set in exactly one mask.
+bitboard& operator^=(const bitboard& b) — Toggle every tile set in b.
+bitboard& operator=(bitboard&&) noexcept = default — Take over another mask's storage.
+bitboard& operator=(const bitboard& other) — Copy another mask's tiles.
+friend bool operator==(const bitboard& a, const bitboard& b) — Check whether both masks contain the same map tiles.
+friend bitboard operator|(bitboard&& a, const bitboard& b) — (bitboard&& a|Tiles set in either mask, reusing a's storage.
+friend bitboard operator|(const bitboard& a, const bitboard& b) — (const bitboard& a|Tiles set in either mask.
+bitboard& operator|=(const bitboard& b) — Combine map tiles in place.
+bitboard operator~() const — Return the complement of the map tiles.
+std::vector<vec2> positions() const — Get the positions of all set map tiles.
+void print() const — Print the buffer through the engine.
+const std::uint64_t* ptr() const noexcept — Access contiguous backing storage; preserve its layout when passing it to the host.
+std::uint64_t* ptr() noexcept — Access aligned raw storage for SDK imports.
+static std::size_t raw_buffer_size() — Get the size of the engine-chunked buffer in bytes.
+bitboard reachable_tiles(vec2 origin, std::uint16_t distance, bitboard& frontier, bitboard& scratch) const — Get reachable tiles using caller-provided working buffers. @param origin Start tile. @param distance Maximum number of 8-directional steps from `origin`. @param frontier Working buffer; its contents are overwritten. @param scratch Working buffer; its contents are overwritten.
+bitboard reachable_tiles(vec2 origin, std::uint16_t distance) const — Get reachable tiles using this board as walls. @param origin Start tile. @param distance Maximum number of 8-directional steps from `origin`.
+void reachable_tiles_into(vec2 origin, std::uint16_t distance, bitboard& frontier, bitboard& scratch, bitboard& out) const — Like `reachable_tiles`, but writes into `out` instead of returning a new board. @param origin Start tile. @param distance Maximum number of 8-directional steps from `origin`. @param frontier Working buffer; its contents are overwritten. @param scratch Working buffer; its contents are overwritten. @param out Destination; its previous contents are overwritten.
+void reachable_tiles_into(vec2 origin, std::uint16_t distance, bitboard& out) const — Like `reachable_tiles`, but writes into `out` instead of returning a new board. @param origin Start tile. @param distance Maximum number of 8-directional steps from `origin`. @param out Destination; its previous contents are overwritten.
+bitboard reflect(symmetry value) const — Return a reflected copy using the requested map symmetry. @param value Map symmetry to apply.
+bitboard reflect_horizontal() const — Reflect across the map horizontally, reversing tile x coordinates.
+void reflect_horizontal_into(bitboard& out) const — Like `reflect_horizontal`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+void reflect_into(symmetry value, bitboard& out) const — Like `reflect`, but writes into `out` instead of returning a new board. @param value Map symmetry to apply. @param out Destination; its previous contents are overwritten.
+bitboard reflect_vertical() const — Reflect across the map vertically, reversing tile y coordinates.
+void reflect_vertical_into(bitboard& out) const — Like `reflect_vertical`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+bitboard rotate_180() const — Rotate tiles 180 degrees within the map dimensions.
+void rotate_180_into(bitboard& out) const — Like `rotate_180`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+void set(vec2 p, bool value = true) — Set or clear a tile; throws if it is outside the map. @param p Tile to update. @param value `true` to set the tile, `false` to clear it.
+bitboard shadow_cast(vec2 origin, std::uint16_t distance) const — Get visible tiles using this board as opaque walls. @param origin Viewer tile. @param distance Maximum sight radius in tiles.
+void shadow_cast_into(vec2 origin, std::uint16_t distance, bitboard& out) const — Like `shadow_cast`, but writes into `out` instead of returning a new board. @param origin Viewer tile. @param distance Maximum sight radius in tiles. @param out Destination; its previous contents are overwritten.
+bitboard shift_right(std::int32_t count) const — Shift tiles horizontally; negative counts shift left. @param count Columns to shift; negative values shift left.
+void shift_right_into(std::int32_t count, bitboard& out) const — Like `shift_right`, but writes into `out` instead of returning a new board. @param count Columns to shift; negative values shift left. @param out Destination; its previous contents are overwritten.
+bitboard shift_up(std::int32_t count) const — Shift tiles vertically; negative counts shift down. @param count Rows to shift; negative values shift down.
+void shift_up_into(std::int32_t count, bitboard& out) const — Like `shift_up`, but writes into `out` instead of returning a new board. @param count Rows to shift; negative values shift down. @param out Destination; its previous contents are overwritten.
+void swap(bitboard& other) noexcept — Exchange ownership of raw board storage without querying the host. @param other Bitboard to exchange contents with.
+void toggle(vec2 p) — Invert a tile; throws if it is outside the map. @param p Tile to flip.
+std::int32_t width() const — Get the map dimensions in tiles.
+## cambc::buff_collection
+const_iterator begin() const — Iterate captured buffs without refreshing; the collection must outlive the iterator.
+std::default_sentinel_t end() const noexcept — Get the past-the-end iterator for the stored values or owning snapshot.
+buff_t get(buff_types kind) const — Get the requested buff snapshot; absent buffs throw std::out_of_range. @param kind Buff kind to look up.
+template <class T> T get() const — Get the requested buff snapshot; absent buffs throw std::out_of_range.
+bool has(buff_types kind) const — Check the captured collection for this buff kind without querying the host. @param kind Buff kind to test for.
+template <class T> bool has() const — Check the captured collection for the selected buff payload type.
+bool has_enhanced_attack() const — Check whether the captured collection has an enhanced-attack buff.
+bool has_shield() const — Check whether the captured collection has a shield buff.
+bool has_stun() const — Check whether the captured collection has a stun buff.
+bool is_empty() const — Check whether the captured collection has no active buffs.
+friend bool operator==(const buff_collection&, const buff_collection&) = default — Compare every captured buff.
+std::size_t size() const — Get the number of entries in this container.
+## cambc::buff_collection::const_iterator
+const_iterator() = default — Construct an iterator that compares equal to the end sentinel.
+explicit const_iterator(const storage_type& values) — Iterate the captured buffs in values.
+pointer operator->() const — Access the current buff.
+reference operator*() const — Access the current buff.
+const_iterator operator++(int) — Advance to the next captured buff, returning the previous position.
+const_iterator& operator++() — Advance to the next captured buff.
+bool operator==(const const_iterator&) const = default — Compare iterator positions.
+bool operator==(std::default_sentinel_t) const — Check whether every captured buff has been visited.
+## cambc::buff_enhanced_attack
+friend bool operator==(const buff_enhanced_attack&, const buff_enhanced_attack&) = default — Compare every field.
+## cambc::buff_restrictions
+static constexpr buff_restrictions all() noexcept — Construct a mask with every known flag set.
+constexpr iterator begin() const noexcept — 
+constexpr std::uint8_t bits() const noexcept — Return the underlying engine bit pattern, including unknown flags.
+constexpr buff_restrictions() noexcept = default — Construct a mask with no restrictions.
+constexpr bool contains(buff_restrictions flags) const noexcept — Check that all selected bits are present; an empty mask is always contained. @param flags Flags to test.
+static constexpr buff_restrictions empty() noexcept — Construct an empty mask.
+constexpr iterator end() const noexcept — 
+static constexpr std::optional<buff_restrictions> from_bits(std::uint8_t bits) noexcept — Decode raw engine bits, or return nullopt if any bit is not a known flag. @param bits Raw flag bits.
+static constexpr buff_restrictions from_bits_retain(std::uint8_t bits) noexcept — Decode raw engine bits without discarding unknown future flags. @param bits Raw flag bits, kept as is including unnamed bits.
+static constexpr buff_restrictions from_bits_truncate(std::uint8_t bits) noexcept — Decode raw engine bits, discarding unknown flags. @param bits Raw flag bits; unnamed bits are dropped.
+constexpr void insert(buff_restrictions flags) noexcept — Set selected flags. @param flags Flags to set.
+constexpr bool intersects(buff_restrictions flags) const noexcept — Check whether any selected bit is present. @param flags Flags to test.
+constexpr bool is_all() const noexcept — Check whether every known flag is set.
+constexpr bool is_empty() const noexcept — Check whether no bits, known or unknown, are set.
+friend constexpr buff_restrictions operator-(buff_restrictions a, buff_restrictions b) noexcept — Return the flags in a that are not in b.
+constexpr buff_restrictions& operator-=(buff_restrictions flags) noexcept — Remove selected flags.
+friend constexpr buff_restrictions operator&(buff_restrictions a, buff_restrictions b) noexcept — Intersect bitmasks.
+constexpr buff_restrictions& operator&=(buff_restrictions flags) noexcept — Retain only selected flags.
+friend constexpr buff_restrictions operator^(buff_restrictions a, buff_restrictions b) noexcept — Toggle selected bits.
+constexpr buff_restrictions& operator^=(buff_restrictions flags) noexcept — Toggle selected flags.
+friend constexpr bool operator==(buff_restrictions a, buff_restrictions b) noexcept — Compare every bit, including unknown flags.
+friend constexpr buff_restrictions operator|(buff_restrictions a, buff_restrictions b) noexcept — Compose bitmasks without discarding unknown flags.
+constexpr buff_restrictions& operator|=(buff_restrictions flags) noexcept — Insert selected flags.
+friend constexpr buff_restrictions operator~(buff_restrictions value) noexcept — Complement known flags; unknown flags are discarded.
+constexpr void remove(buff_restrictions flags) noexcept — Clear selected flags. @param flags Flags to clear.
+constexpr void set(buff_restrictions flags, bool value) noexcept — Insert selected flags when value is true, otherwise remove them. @param flags Flags to update. @param value `true` to set the flags, `false` to clear them.
+constexpr void toggle(buff_restrictions flags) noexcept — Toggle selected flags. @param flags Flags to flip.
+## cambc::buff_shield
+friend bool operator==(const buff_shield&, const buff_shield&) = default — Compare every field.
+## cambc::buff_stun
+friend bool operator==(const buff_stun&, const buff_stun&) = default — Compare every field.
+## cambc::camp
+std::int32_t attack_range() const override — Get attack range from this camp's design; melee camps have range 1.
+camp_stats base_stats() const — Get an owning snapshot of the camp's engine-provided design stats.
+map::camp_group camp_group() const — Query this camp's group from the engine on every call; invalid identities throw.
+float focus() const override — Query current focus for this visible unit.
+float health() const override — Query current health; live state requires a visible runtime identity.
+bool is_elk() const noexcept — Check whether this camp is an elk.
+bool is_gem_cluster() const noexcept — Check whether this camp is a gem cluster.
+bool is_gold_cluster() const noexcept — Check whether this camp is a gold cluster.
+bool is_monolith() const noexcept — Check whether this camp is a monolith.
+bool is_visible() const override — Check whether live state is available; hidden units and design-only views return false.
+bool is_wolf() const noexcept — Check whether this camp is a wolf.
+camp_type kind() const noexcept — Get the entity or inventory entry kind.
+float max_health() const override — Query current maximum health; live state requires a visible runtime identity.
+operator handle_camp_t() const noexcept — Convert to the strong camp identity.
+friend bool operator==(const camp& a, const camp& b) noexcept — Compare camp identities.
+vec2 position() const override — Get the tile position; live entity views query current engine state.
+vec2 spawn_position() const noexcept — Get the camp's original spawn tile, not its current live position.
+float strength() const override — Query current strength for this visible unit.
+## cambc::champion
+std::array<ability, 2> abilities() const — Return a copy of the two champion-bound ability views with immutable cached metadata.
+void attack(const altar_lock& target) const — Attack an altar lock; requires the authenticated self and host-validated action availability. @param target Visible altar lock within attack range.
+void attack(const unit& target) const — Attack a champion or camp view; requires the authenticated self and host-validated action availability. @param target Visible champion or camp within attack range.
+std::int32_t attack_range() const override — Get the unit's attack range in tiles; champion state is queried live.
+champion_stats base_stats() const — Get the champion design base stats.
+void buy(consumable_type type) const — Buy a consumable for self. @param type Consumable to buy.
+void buy(item_type type, std::uint32_t count = 1) const — Buy items for self. @param type Item to buy. @param count Number of copies to buy.
+bool can_attack() const — Check whether this champion can attack.
+bool can_buy(consumable_type consumable) const — Check whether a consumable can be bought in the current state. @param consumable Consumable to buy.
+bool can_buy(item_type item, std::uint32_t count = 1) const — Check whether an item can be bought in the current state. @param item Item to buy. @param count Number of copies to buy.
+bool can_cast() const — Check whether this champion can cast.
+bool can_move() const — Check whether this champion can move.
+bool can_sell() const — Check whether the authenticated self currently has permission to sell.
+void cancel_recall() const — Cancel an active recall.
+void cancel_submit_gems() const — Cancel an active gem submission.
+explicit champion(champion_type type) — A design-only champion: immutable properties are available, live queries require vision.
+champion_type champion_name() const — Get the entity or inventory entry kind.
+const enum_map<consumable_type, consumable>& consumables() const noexcept — Action wrappers by consumable type; each count is queried live.
+void end_turn() const — Yield the current champion turn.
+float focus() const override — Query current focus for this visible unit.
+std::uint32_t gem_count() const — Get carried gems.
+std::uint32_t gold_count() const — Get gold; this query requires self.
+bool has_completed_turn() const — Check whether this champion has completed its turn.
+float health() const override — Get current and maximum health.
+bool is_alive() const — Check whether the champion is alive.
+bool is_ally() const — Check whether this champion belongs to the observing team.
+bool is_enemy() const — Check whether this champion belongs to the opposing team.
+bool is_recalling() const — Check whether this champion is recalling.
+bool is_submitting_gems() const — Check whether this champion is submitting gems.
+bool is_teleporting() const — Check whether this champion is teleporting.
+bool is_visible() const override — Check whether the champion can be inspected from this perspective.
+enum_map<item_type> item_count() const — Get item counts indexed by item type.
+float max_health() const override — Query current maximum health; live state requires a visible runtime identity.
+bool move(vec2 delta) const — Attempt to move by a delta from the current position. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param delta Displacement from the current position.
+bool move_absolute(vec2 destination) const — Attempt to move to an absolute destination tile. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param destination Map tile to move to.
+bool move_towards(vec2 target) const — Move to the reachable tile on a shortest path to `target`, avoiding walls, holes, altars, the enemy spawn and visible units. Returns false without moving when already there, unable to move, or `target` is blocked or unreachable, and false for a newly revealed hidden obstruction. @param target Map tile to approach.
+operator handle_champion_t() const noexcept — Access the underlying engine handle.
+friend bool operator==(const champion& a, const champion& b) noexcept — Compare champion identities.
+passive_type passive() const — Get the passive effect tag from the champion's immutable design.
+bool place_ward(vec2 destination) const — Place a ward at a destination tile. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param destination Tile to place the ward on.
+vec2 position() const override — Get the tile position; live entity views query current engine state.
+std::int32_t prev_priority() const — Get the scheduling priority used for the current round.
+std::int32_t priority() const — Get the scheduling priority for the next round.
+void recall() const — Start recalling to spawn.
+std::int32_t remaining_channel_time() const — Query the visible champion's remaining channel rounds; no active channel throws.
+buff_restrictions restrictions() const — Union of active buff restrictions; requires visibility.
+void sell(item_type type, std::uint32_t count = 1) const — Sell items for self; the engine validates champion and shop restrictions. @param type Item to sell. @param count Number of copies to sell.
+void set_priority(std::int32_t priority) const — Set the scheduling priority for the next round. @param priority New scheduling priority; takes effect from the next round and persists.
+champion_state state() const — Get current state and action availability.
+float strength() const override — Query current strength for this visible unit.
+void submit_gems(vec2 altar) const — Start submitting gems at an altar. @param altar Altar tile to tribute at.
+team team() const — Get the owning team relative to the authenticated bot.
+bitboard visible_tiles() const — Get tiles visible to this champion.
+bitboard visible_tiles_from(vec2 position) const — Vision at a hypothetical position, using this champion's design. @param position Hypothetical tile to see from.
+void visible_tiles_from_into(vec2 position, bitboard& out) const — Like `visible_tiles_from`, but writes into `out` instead of returning a new board. @param position Hypothetical tile to see from. @param out Destination; its previous contents are overwritten.
+void visible_tiles_into(bitboard& out) const — Like `visible_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+std::int32_t ward_cooldown() const — Query the authenticated champion's remaining ward recharge rounds.
+bitboard ward_placement_tiles() const — Compute self-only ward placement range from current position and engine settings.
+void ward_placement_tiles_into(bitboard& out) const — Like `ward_placement_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+std::vector<vec2> ward_positions() const — Query an owning list of wards placed by the authenticated self champion.
+## cambc::champion_state
+static constexpr champion_state all() noexcept — Construct a mask with every known flag set.
+constexpr iterator begin() const noexcept — 
+constexpr std::uint32_t bits() const noexcept — Return the underlying engine bit pattern, including unknown flags.
+constexpr champion_state() noexcept = default — Construct a state with no flags set.
+constexpr bool contains(champion_state flags) const noexcept — Check that all selected bits are present; an empty mask is always contained. @param flags Flags to test.
+static constexpr champion_state empty() noexcept — Construct an empty mask.
+constexpr iterator end() const noexcept — 
+static constexpr std::optional<champion_state> from_bits(std::uint32_t bits) noexcept — Decode raw engine bits, or return nullopt if any bit is not a known flag. @param bits Raw flag bits.
+static constexpr champion_state from_bits_retain(std::uint32_t bits) noexcept — Decode raw engine bits without discarding unknown future flags. @param bits Raw flag bits, kept as is including unnamed bits.
+static constexpr champion_state from_bits_truncate(std::uint32_t bits) noexcept — Decode raw engine bits, discarding unknown flags. @param bits Raw flag bits; unnamed bits are dropped.
+constexpr void insert(champion_state flags) noexcept — Set selected flags. @param flags Flags to set.
+constexpr bool intersects(champion_state flags) const noexcept — Check whether any selected bit is present. @param flags Flags to test.
+constexpr bool is_all() const noexcept — Check whether every known flag is set.
+constexpr bool is_dead() const noexcept — Check whether the alive flag is clear.
+constexpr bool is_empty() const noexcept — Check whether no bits, known or unknown, are set.
+friend constexpr champion_state operator-(champion_state a, champion_state b) noexcept — Return the flags in a that are not in b.
+constexpr champion_state& operator-=(champion_state flags) noexcept — Remove selected flags.
+friend constexpr champion_state operator&(champion_state a, champion_state b) noexcept — Intersect bitmasks.
+constexpr champion_state& operator&=(champion_state flags) noexcept — Retain only selected flags.
+friend constexpr champion_state operator^(champion_state a, champion_state b) noexcept — Toggle selected bits.
+constexpr champion_state& operator^=(champion_state flags) noexcept — Toggle selected flags.
+friend constexpr bool operator==(champion_state a, champion_state b) noexcept — Compare every bit, including unknown flags.
+friend constexpr champion_state operator|(champion_state a, champion_state b) noexcept — Compose bitmasks without discarding unknown flags.
+constexpr champion_state& operator|=(champion_state flags) noexcept — Insert selected flags.
+friend constexpr champion_state operator~(champion_state value) noexcept — Complement known flags; unknown flags are discarded.
+constexpr void remove(champion_state flags) noexcept — Clear selected flags. @param flags Flags to clear.
+constexpr void set(champion_state flags, bool value) noexcept — Insert selected flags when value is true, otherwise remove them. @param flags Flags to update. @param value `true` to set the flags, `false` to clear them.
+constexpr void toggle(champion_state flags) noexcept — Toggle selected flags. @param flags Flags to flip.
+## cambc::consumable
+consumable() = default — Create an inventory entry; live queries require a champion-bound entry.
+std::uint32_t count() const — Get the number currently owned.
+consumable_type kind() const noexcept — Get the entity or inventory entry kind.
+bool use() const — Use the entry on a target or tile, if required; the host validates the self-only action. Returns false for a newly revealed hidden obstruction; known invalid destinations throw.
+bool use(vec2 destination) const — Use the entry on a target or tile, if required; the host validates the self-only action. Returns false for a newly revealed hidden obstruction; known invalid destinations throw. @param destination Tile to use the consumable at.
+## cambc::consumable_info
+friend bool operator==(const consumable_info&, const consumable_info&) = default — Compare every field.
+## cambc::consumable_type
+std::uint32_t carry_limit() const — Get the maximum carried inventory count.
+constexpr consumable_type() noexcept = default — Construct the first enum value.
+constexpr consumable_type(enum_type value) noexcept — Wrap an underlying enum value without changing its identity.
+explicit constexpr consumable_type(std::uint32_t value) noexcept — Explicitly decode an ABI integer; metadata queries reject invalid values.
+std::uint32_t cost() const — Get the purchase cost in gold.
+consumable_info info() const — Get an owning metadata value; invalid kinds and host failures throw.
+constexpr operator enum_type() const noexcept — Preserve compatibility with functions expecting the underlying enum.
+template <class T> requires std::is_integral_v<T> constexpr explicit operator T() const noexcept — Explicit integer conversion for indexing and host ABI calls.
+## cambc::debug
+void draw_dot(vec2 position, std::uint32_t rgb) — Emit a debug dot on a tile using a packed 0xRRGGBB colour. @param position Tile to mark. @param rgb Packed `0xRRGGBB` colour.
+void draw_line(vec2 from, vec2 to, std::uint32_t rgb) — Emit a debug line between tiles using a packed 0xRRGGBB colour. @param from Start tile. @param to End tile. @param rgb Packed `0xRRGGBB` colour.
+## cambc::distance_field
+void compute(const bitboard& walls, const bitboard& roots, bitboard& visited, std::uint16_t max_distance = unreachable) — Compute distances from roots, reusing the visited buffer. @param walls Impassable tiles. @param roots Tiles at distance zero. @param visited Receives the tiles the search reached. @param max_distance Tiles farther than this are left unreached.
+void compute_to(const bitboard& walls, const bitboard& roots, const bitboard& destinations, bitboard& visited, std::uint16_t max_distance = unreachable) — Compute distances until destinations are reached or the search is exhausted. @param walls Impassable tiles. @param roots Tiles at distance zero. @param destinations The search stops once these tiles are reached. @param visited Receives the tiles the search reached. @param max_distance Tiles farther than this are left unreached.
+std::uint16_t compute_to_with_expansion_count(const bitboard& walls, const bitboard& roots, const bitboard& destinations, bitboard& visited, std::uint16_t max_distance = unreachable) — Compute towards destinations and return the number of expansion steps. @param walls Impassable tiles. @param roots Tiles at distance zero. @param destinations The search stops once these tiles are reached. @param visited Receives the tiles the search reached. @param max_distance Tiles farther than this are left unreached.
+std::uint16_t compute_with_expansion_count(const bitboard& walls, const bitboard& roots, bitboard& visited, std::uint16_t max_distance = unreachable) — Compute distances and return the number of expansion steps. @param walls Impassable tiles. @param roots Tiles at distance zero. @param visited Receives the tiles the search reached. @param max_distance Tiles farther than this are left unreached.
+distance_field() — Allocate a distance buffer that reads as zero until written.
+distance_field(const distance_field& other) — Copy another field's distances.
+distance_field(distance_field&&) noexcept = default — Take over another field's storage.
+std::vector<std::uint16_t> export_linear_buffer() const — Return a row-major copy of the distances.
+void export_linear_buffer(std::span<std::uint16_t> values) const — Export to a caller-provided row-major buffer. @param values Destination with one distance per tile in row-major order.
+std::vector<std::uint8_t> export_raw_buffer() const — Return a copy of raw storage.
+void export_raw_buffer(std::span<std::uint8_t> bytes) const — Copy raw storage to a caller-provided buffer. @param bytes Destination, exactly `raw_buffer_size()` long.
+std::uint16_t get(vec2 p) const — Read a tile distance; throws if it is outside the map. @param p Tile to query.
+std::int32_t height() const — Get the map height in tiles.
+void import_linear_buffer(std::span<const std::uint16_t> values) — Import a packed row-major buffer. @param values One distance per tile in row-major order.
+void import_raw_buffer(std::span<const std::uint8_t> bytes) — Copy an engine-chunked buffer into this object. @param bytes Engine-chunked bytes, exactly `raw_buffer_size()` long.
+static std::size_t linear_buffer_size() — Get the size of the packed row-major buffer in bytes.
+std::optional<vec2> next_move_from(vec2 from) const — First optimal step from `from` towards a root, as a direction delta in compass order from north. Returns nullopt at a root or unreached tile; throws if `from` is outside the map. @param from Tile to step from.
+std::vector<vec2> next_moves_from(vec2 from) const — Every optimal step from `from` towards a root, as direction deltas in compass order from north. @param from Tile to step from.
+distance_field& operator=(const distance_field& other) — Copy another field's distances.
+distance_field& operator=(distance_field&&) noexcept = default — Take over another field's storage.
+void print() const — Print the buffer through the engine.
+const std::uint16_t* ptr() const noexcept — Access contiguous backing storage; preserve its layout when passing it to the host.
+std::uint16_t* ptr() noexcept — Access raw distance storage for SDK imports.
+static std::size_t raw_buffer_size() — Get the size of the engine-chunked buffer in bytes.
+void set(vec2 p, std::uint16_t value) — Write a tile distance; throws if it is outside the map. @param p Tile to update. @param value Distance to store.
+std::int32_t width() const — Get the map dimensions in tiles.
+## cambc::draft
+std::vector<champion_draft> current_draft(team side) — Get an owning list of completed draft picks, recomputed each call. @param side Team whose picks to return.
+void pick(champion_draft pick) — Submit a champion pick for the current draft round. @param pick Champion to pick.
+std::uint32_t team_size() — Query the number of champions per team; gameplay perspectives propagate engine errors.
+## cambc::draft_memory_buffer
+auto begin() const — Iterate over read-only captured bytes without querying the host.
+const std::byte* data() const — Borrow bytes captured at startup; assignment does not change this snapshot.
+draft_memory_buffer() — Load the current draft bytes into owning, read-only storage.
+draft_memory_buffer(const draft_memory_buffer&) = default — Copy the captured bytes without querying or submitting to the engine.
+auto end() const — Get the end of the read-only captured bytes.
+bool is_empty() const — Check whether the captured buffer is empty.
+const std::byte& operator[](std::size_t offset) const — Read one startup-snapshot byte; an out-of-range offset throws std::out_of_range.
+draft_memory_buffer& operator=(const draft_memory_buffer& other) — Submit another buffer's captured bytes, including self-assignment.
+draft_memory_buffer& operator=(std::initializer_list<std::byte> bytes) — Submit byte initialiser lists; an empty list submits no data.
+draft_memory_buffer& operator=(std::span<const std::byte> bytes) — Submit bytes immediately; errors throw and leave captured bytes unchanged. Oversized input is truncated to capacity; shorter input leaves the remaining engine bytes unchanged.
+template <std::ranges::contiguous_range Range> requires (std::ranges::sized_range<Range> && std::is_trivially_copyable_v<std::ranges::range_value_t<Range>>) draft_memory_buffer& operator=(Range&& values) — Submit contiguous arrays, vectors or spans of trivially copyable values using native layout.
+std::size_t size() const — Get the captured byte count without querying the host.
+## cambc::enum_map
+auto begin() const noexcept — Get a const iterator to the first enum-indexed value.
+auto begin() noexcept — Get an iterator to the first enum-indexed value.
+auto end() const noexcept — Get the const past-the-end iterator for enum-indexed values.
+auto end() noexcept — Get the past-the-end iterator for enum-indexed values.
+const Value& operator[](T key) const — Access the value for key; throws std::out_of_range for an invalid key.
+Value& operator[](T key) — Access the value for key; throws std::out_of_range for an invalid key.
+friend bool operator==(const enum_map&, const enum_map&) = default — Compare every value.
+const Value* ptr() const noexcept — Access contiguous backing storage; preserve its layout when passing it to the host.
+Value* ptr() noexcept — Access contiguous backing storage; preserve its layout when passing it to the host.
+constexpr std::size_t size() const noexcept — Get the number of entries in this container.
+## cambc::error
+error_code code() const noexcept — Get the engine error code.
+error(error_code code, std::string message) — Construct an error with an explicit code and message.
+explicit error(error_code code) — Construct an engine error with its code and diagnostic message.
+explicit error(std::int32_t code) — Capture the engine diagnostic before another SDK call changes it.
+const std::string& message() const noexcept — Get the engine diagnostic captured when this error was created.
+## cambc::item_info
+friend bool operator==(const item_info&, const item_info&) = default — Compare every field.
+## cambc::item_type
+std::uint32_t combine_count() const — Get the ingredient count needed to create the result item.
+std::uint32_t cost() const — Get the full value in gold: the purchase price, refunded in full when sold.
+std::int32_t focus_points() const — Get the focus bonus.
+std::int32_t health_points() const — Get the health bonus.
+item_info info() const — Get an owning metadata value; invalid kinds and host failures throw.
+bool is_purchasable() const — Whether the item can be bought directly; emblems must be combined.
+constexpr item_type() noexcept = default — Construct the first enum value.
+constexpr item_type(enum_type value) noexcept — Wrap an underlying enum value without changing its identity.
+explicit constexpr item_type(std::uint32_t value) noexcept — Explicitly decode an ABI integer; metadata queries reject invalid values.
+constexpr operator enum_type() const noexcept — Preserve compatibility with functions expecting the underlying enum.
+template <class T> requires std::is_integral_v<T> constexpr explicit operator T() const noexcept — Explicit integer conversion for indexing and host ABI calls.
+std::optional<item_passive> passive() const — Get the optional passive effect.
+float passive_magnitude() const — Get the passive magnitude.
+std::optional<item_type> result() const — Get the combination result, if this item can be combined.
+std::int32_t strength_points() const — Get the strength bonus.
+## cambc::map
+const bitboard& altars() — Get the immutable altar mask; the reference lasts for the bot lifetime.
+const bitboard& bushes() — Get the immutable bush mask; the reference lasts for the bot lifetime.
+cambc::camp camp(vec2 position) — Find a camp by spawn tile, querying the engine on every call; throws if there is no camp. @param position Spawn tile of the camp.
+std::vector<camp_group> camp_groups() — Query physical camp groups from the engine on every call; also available in draft.
+std::int32_t height() — Get the map height in tiles.
+const bitboard& holes() — Get the immutable hole mask; the reference lasts for the bot lifetime.
+bool is_in_bounds(vec2 position) — Check whether a tile is within the map dimensions. @param position Position to check.
+vec2 reflect_horizontal(vec2 p) — Reflect across the map horizontally, reversing tile x coordinates. @param p Map position to reflect.
+vec2 reflect_vertical(vec2 p) — Reflect across the map vertically, reversing tile y coordinates. @param p Map position to reflect.
+vec2 rotate_180(vec2 p) — Rotate tiles 180 degrees within the map dimensions. @param p Map position to rotate.
+const bitboard& spawn_region(team value) — Get the cached spawn mask for a team. @param value Team whose spawn region to return.
+symmetry symmetry() — Get the map symmetry.
+const bitboard& walls() — Get cached terrain masks; references remain valid for the bot lifetime.
+std::int32_t width() — Get the map width in tiles.
+## cambc::map::camp_group
+auto begin() const noexcept — Iterate immutable camp members stored in this physical group.
+std::span<const camp> camps() const noexcept — Get the camp members stored in this physical group.
+auto end() const noexcept — Get the past-the-end iterator for this group's camp members.
+std::uint32_t gem_value() const noexcept — Get the gem reward for capturing this camp group.
+std::uint32_t gold_value() const noexcept — Get the gold reward for capturing this camp group.
+std::int32_t max_respawn_timer() const noexcept — Get the configured camp-group respawn duration in rounds.
+operator handle_camp_group_t() const noexcept — Convert to the strong camp-group identity.
+friend bool operator==(const camp_group& a, const camp_group& b) noexcept — Compare camp-group identities.
+bitboard spawn_tiles() const — Build the mask of original camp spawn tiles in this group; computed on every call.
+void spawn_tiles_into(bitboard& out) const — Like `spawn_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+camp_group_state state() const — Current lifecycle state; remembered state outside current vision is not exposed.
+## cambc::shared_memory_buffer
+reference operator[](std::size_t offset) const — Access one byte; throws if the offset is outside the buffer.
+template <class T, std::size_t Extent> requires (std::is_trivially_copyable_v<T> && !std::is_const_v<T>) void read(std::size_t offset, std::span<T, Extent> values) const — Read a checked byte range into trivially copyable values. @param offset Byte offset into shared memory. @param values Receives the values; its size sets how many are read.
+void read(std::size_t offset, std::span<std::byte> bytes) const — Read a checked byte range into caller-owned storage. @param offset Byte offset into shared memory. @param bytes Receives the bytes; its size sets how many are read.
+static std::size_t size() — Get the shared-memory capacity in bytes.
+template <class T, std::size_t Extent> requires std::is_trivially_copyable_v<T> void write(std::size_t offset, std::span<T, Extent> values) const — Write the object representations of trivially copyable values to a checked byte range.
+void write(std::size_t offset, std::span<const std::byte> bytes) const — Write bytes at an offset; the entire range must fit. @param offset Byte offset into shared memory. @param bytes Bytes to write.
+## cambc::shared_memory_buffer::reference
+operator std::uint8_t() const — Read the current byte at this proxy's checked offset.
+reference& operator=(const reference& other) — 
+reference& operator=(std::byte value) — 
+reference& operator=(std::uint8_t value) — Write one byte at this proxy's checked offset.
+reference(const reference&) = default — 
+## cambc::teleport
+cambc::champion champion() const — Construct a live view of the champion in the teleport reservation.
+bool is_ally() const — Check whether this teleport belongs to the observing team.
+bool is_enemy() const — Check whether this teleport belongs to the opposing team.
+friend bool operator==(const teleport&, const teleport&) = default — Compare every captured field.
+vec2 position() const noexcept — Get the destination tile captured in this teleport reservation.
+std::int32_t remaining_time() const noexcept — Get the remaining round count captured in this observation.
+team team() const — Get the owning team relative to the authenticated bot.
+explicit teleport(detail::teleport_info value) — Copy a visible teleport reservation; its metadata remains a snapshot.
+bitboard visible_tiles() const — Hypothetical caster vision after arriving at the reserved destination, not current visibility.
+void visible_tiles_into(bitboard& out) const — Like `visible_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+## cambc::uninitialized_t
+explicit uninitialized_t() = default — Explicit so that `{}` cannot select the tag by accident.
+## cambc::unit
+virtual ~unit() = default — Destroy a derived unit view through the shared interface.
+virtual std::int32_t attack_range() const = 0 — Attack range in Chebyshev tiles; melee units have range 1.
+bitboard attack_tiles() const — Build the live unit's Chebyshev attack-range mask; does not filter targets or attack availability. Hidden units and design-only champions propagate position/range query errors.
+void attack_tiles_into(bitboard& out) const — Like `attack_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+buff_collection buffs() const — Construct a fresh owning buff collection; previous collections retain their captured values.
+virtual float focus() const = 0 — Query current focus for this visible unit.
+virtual float health() const = 0 — Query current health; live state requires a visible runtime identity.
+virtual bool is_visible() const = 0 — Check whether live state is available; hidden units and design-only views return false.
+virtual float max_health() const = 0 — Query current maximum health; live state requires a visible runtime identity.
+virtual vec2 position() const = 0 — Get the tile position; live entity views query current engine state.
+virtual float strength() const = 0 — Query current strength for this visible unit.
+## cambc::vec2
+constexpr std::int64_t chebyshev_distance(vec2 b) const — Get the largest absolute coordinate difference. @param b Other vector.
+constexpr std::int64_t cross(vec2 b) const — Get the signed two-dimensional cross product with a 64-bit result. @param b Other vector.
+constexpr std::int64_t dot(vec2 b) const — Dot and cross products use 64-bit arithmetic. @param b Other vector.
+constexpr std::int64_t length_squared() const — Get the squared Euclidean length.
+constexpr vec2 operator-() const — Negate both components.
+friend constexpr vec2 operator-(vec2 a, vec2 b) — Subtract b from a.
+constexpr vec2& operator-=(vec2 b) — Subtract a displacement in place.
+friend constexpr vec2 operator*(std::int32_t n, vec2 a) — Scale a vector by an integer.
+friend constexpr vec2 operator*(vec2 a, std::int32_t n) — Scale a vector by an integer.
+constexpr vec2& operator*=(std::int32_t n) — Scale both components in place.
+friend constexpr vec2 operator/(vec2 a, std::int32_t n) — Divide both components, truncating towards zero. Throws std::invalid_argument when n is zero.
+constexpr vec2& operator/=(std::int32_t n) — Divide both components in place, truncating towards zero. Throws std::invalid_argument when n is zero.
+constexpr vec2 operator+() const — Return the vector unchanged.
+friend constexpr vec2 operator+(vec2 a, vec2 b) — Add two vectors.
+constexpr vec2& operator+=(vec2 b) — Add a displacement in place.
+constexpr auto operator<=>(const vec2&) const = default — Compare by x, then by y.
+constexpr vec2 reflect_horizontal() const — Reflect the vector horizontally across the origin.
+constexpr vec2 reflect_vertical() const — Reflect the vector vertically across the origin.
+constexpr vec2 rotate_180() const — Rotate the vector 180 degrees about the origin.
+constexpr vec2 rotate_ccw() const — Rotate the vector 90 degrees counterclockwise about the origin.
+constexpr vec2 rotate_cw() const — Rotate a displacement by a quarter turn.
+constexpr vec2() = default — Construct an integer tile vector; the default value is the origin.
+constexpr vec2(std::int32_t x, std::int32_t y) — Construct an integer tile vector; the default value is the origin.
+## cambc::vision
+cambc::altar_lock altar_lock_at(vec2 position) — Prefer the allied lock if both teams have a lock on this altar. @param position Tile to query.
+bitboard altar_lock_tiles() — Query current altar-lock occupancy for the selected team or both teams.
+bitboard altar_lock_tiles(team side) — Query current altar-lock occupancy for the selected team or both teams. @param side Team to include.
+void altar_lock_tiles_into(bitboard& out) — Like `altar_lock_tiles()`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+void altar_lock_tiles_into(team side, bitboard& out) — Like `altar_lock_tiles`, but writes into `out` instead of returning a new board. @param side Team to include. @param out Destination; its previous contents are overwritten.
+std::vector<cambc::altar_lock> altar_locks() — Get fresh, owning visible altar-lock snapshots, optionally filtered by team.
+std::vector<cambc::altar_lock> altar_locks(team side) — Get fresh, owning visible altar-lock snapshots, optionally filtered by team. @param side Team to include.
+cambc::camp camp_at(vec2 position) — Find a currently visible camp. @param position Current tile of the camp.
+std::vector<map::camp_group> camp_groups() — A group is currently visible when any original spawn tile is in effective vision, even if empty.
+bitboard camp_tiles() — Get camp occupancy from the current perspective.
+void camp_tiles_into(bitboard& out) — Like `camp_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+std::vector<cambc::camp> camps() — Get an owning list of currently visible camps, recomputed each call.
+cambc::champion champion_at(vec2 position) — Create a fresh view of the currently visible champion at a position. @param position Tile to query.
+bitboard champion_tiles() — Get visible champion occupancy for both sides.
+bitboard champion_tiles(team side) — Get visible champion occupancy for one side. @param side Team to include.
+void champion_tiles_into(bitboard& out) — Like `champion_tiles()`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+void champion_tiles_into(team side, bitboard& out) — Like `champion_tiles`, but writes into `out` instead of returning a new board. @param side Team to include. @param out Destination; its previous contents are overwritten.
+std::vector<cambc::champion> champions() — Get a fresh champion list for the current view and optional team filter.
+std::vector<cambc::champion> champions(team side) — Get an owning list of currently visible champions, recomputed each call. @param side Team to include.
+bool has_altar_lock(vec2 position) — Check for a visible altar lock for either team; missing or hidden locks return false. @param position Tile to query.
+bool has_camp(vec2 position) — False on hidden or empty tiles; invalid positions retain the engine's error. @param position Tile to query.
+bool has_champion(vec2 position) — Check visible champion occupancy at a tile; invalid positions retain engine errors. @param position Tile to query.
+bool has_teleport(vec2 position) — Check whether a tile is occupied by a visible teleport reservation. @param position Tile to query.
+bool has_ward(vec2 position, team side) — Check ward occupancy for `side`; hidden or absent wards return false. @param position Tile to query. @param side Team the ward must belong to.
+bool has_ward(vec2 position) — Check ward occupancy at a tile; hidden or absent wards return false. @param position Tile to query.
+teleport teleport_at(vec2 position) — Get the visible teleport reservation on a tile. @param position Tile to query.
+bitboard teleport_tiles() — Query current visible teleport-reservation occupancy.
+void teleport_tiles_into(bitboard& out) — Like `teleport_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+std::vector<teleport> teleports() — Get fresh, owning visible teleport-reservation snapshots.
+bitboard visible_tiles() — Query current visible tiles.
+void visible_tiles_into(bitboard& out) — Like `visible_tiles`, but writes into `out` instead of returning a new board. @param out Destination; its previous contents are overwritten.
+cambc::ward ward_at(vec2 position, team side) — Get the ordinary ward at a tile for one team. @param position Tile to query. @param side Team the ward must belong to.
+cambc::ward ward_at(vec2 position) — Get the ordinary ward at a tile. @param position Tile to query.
+bitboard ward_tiles() — Query visible ordinary-ward occupancy for both teams.
+bitboard ward_tiles(team side) — Query visible ordinary-ward occupancy for one team. @param side Team to include.
+void ward_tiles_into(bitboard& out) — Like `ward_tiles()`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+void ward_tiles_into(team side, bitboard& out) — Like `ward_tiles`, but writes into `out` instead of returning a new board. @param side Team to include. @param out Destination; its previous contents are overwritten.
+std::vector<cambc::ward> wards() — Fresh visible ordinary-ward observations; overlapping records remain distinct.
+std::vector<cambc::ward> wards(team side) — Get fresh ordinary-ward observations filtered by team. @param side Team to include.
+## cambc::ward
+bool is_ally() const noexcept — Check whether this ward belongs to the observing team.
+bool is_enemy() const noexcept — Check whether this ward belongs to the opposing team.
+friend bool operator==(const ward&, const ward&) = default — Compare every captured field.
+vec2 position() const noexcept — Get the ward's tile.
+std::optional<std::int32_t> remaining_time() const noexcept — Get the remaining lifetime in rounds; empty for an unlimited lifetime.
+cambc::team team() const noexcept — Get the owning team relative to the authenticated bot.
+bitboard visible_tiles() const — Hypothetical vision from this ward's position, ignoring current team visibility.
+static bitboard visible_tiles_from(vec2 position) — Query the mask for ordinary-ward vision at a placement tile. @param position Hypothetical ward tile.
+static void visible_tiles_from_into(vec2 position, bitboard& out) — Like `visible_tiles_from`, but writes into `out` instead of returning a new board. @param position Hypothetical ward tile. @param out Destination; its previous contents are overwritten.
+void visible_tiles_into(bitboard& out) const — Like `visible_tiles`, but writes into `out`. @param out Destination; its previous contents are overwritten.
+## std
+std::size_t operator()(cambc::vec2 v) const noexcept — Hash a tile position.
+std::size_t operator()(const cambc::camp& c) const noexcept — Hash a camp identity.
+std::size_t operator()(const cambc::champion& c) const noexcept — Hash a champion identity.
+std::size_t operator()(const cambc::map::camp_group& g) const noexcept — Hash a camp-group identity.
