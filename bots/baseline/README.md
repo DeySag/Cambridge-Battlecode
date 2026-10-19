@@ -1,97 +1,79 @@
-# First competition bot — SDK 2.2.5
+# v2 — farming with local combat support
 
-An economy-first C++ bot: spread out, clear camps efficiently, finish captures,
-and turn the rewards into score. It uses the current organiser SDK and maps
-from commit `42d945e`.
+C++ submission for organiser SDK 2.2.5. The first ranked replays showed that
+Sprint 1 lost too many fights and carried gems, even when its farming was
+competitive. v2 combines farming with spell damage, nearby ally support and
+safer delivery. See the [ranked review](../../docs/diagnostics/2026-10-19-ranked-review.md).
 
-## Run and submit
+## Strategy
 
-From the repository root, with `cambc` 2.2.5 on PATH:
+1. **Draft farming and combat together.** On ordinary maps choose Varg,
+   Stellar, Cassi/Issac, Ryth and Tavi in that order, up to the map's pick limit.
+   The linked pair provides two separately controlled units for one pick, with
+   the risk that both die if either dies. On boss-only gem maps retain the
+   Tavi, Stellar, Prism, Cassi/Issac, Ren draft.
+2. **Farm separate objectives.** Reserve camp groups with one byte per unit.
+   Rank rewards by walking, clearing, capture and delivery time, health risk,
+   visible enemies and recent deaths. Hold a safe capture until it completes.
+3. **Take useful nearby fights.** Compare visible friendly and enemy health,
+   damage and Focus before pursuing a visible opponent within seven tiles.
+   Prioritize vulnerable targets and gem carriers. Keep farming when no
+   productive engagement is available; do not attack enemies healing on spawn.
+4. **Use spells and defenses.** Estimate enemy bursts from basic attacks,
+   live ability ranges, damage, cooldowns and stuns. Shields, escape dashes and
+   defensive attacks help recover from danger. Ground spells can target
+   enemy champions as well as camps. This is a short heuristic, not a full
+   combat simulator or an assumption that allied vision is shared.
+5. **Deliver safely.** Prefer an altar using actual terrain path distance,
+   visible danger, locks and remembered death locations. Deposit convenient
+   bags, ordinarily bank at 100 gems, and bank smaller exposed bags when
+   health or nearby pressure makes that worthwhile. Reassess long channels;
+   damage alone does not interrupt tribute, so survivable channels can finish.
+   A failed route chosen to avoid danger never silently retries through it.
+6. **Upgrade for both jobs.** Buy Power Strength for basic attackers and
+   Power Focus for spellcasters, interleaving Power Health on ordinary maps.
+   Tavi buys in the field. Recall for healing or substantial unspent gold,
+   and stay on spawn through the healing turn. Buy and use altar locks.
+7. **Remember danger.** Each unit discounts camps near its recent death
+   locations for up to 180 rounds, with the penalty fading over time.
+
+Monolith farming still uses range-four spells outside the attack range of
+three reported by this SDK's runtime. It must be rechecked after balance/SDK
+changes. Issac farms ordinary resources on that map rather than attempting
+the monolith with his basic attacks.
+
+Pathfinding uses fresh occupancy, cached large-map routes and budget checks.
+Action boundaries recheck round identity and availability so a calculation
+resumed after a fuel suspension does not issue stale movement or casts.
+
+## Build and evaluate
 
 ```sh
 cambc build baseline --release
-cambc run baseline starter-cpp --map packs --release
-python3 scripts/evaluate_bot.py
-mkdir -p matches/submission
-cambc bundle baseline --output matches/submission/baseline.zip
+python3 scripts/evaluate_bot.py --candidate baseline --opponent /path/to/sprint1
+python3 scripts/evaluate_bot.py --candidate baseline --opponent /path/to/pressure-caster
 ```
 
-Upload `baseline.zip` on the competition platform. Alternatively, after signing
-in with `cambc login`, use `cambc submit baseline`. The ZIP contains source; the
-platform builds it with its SDK. Local evaluation uses `--release`, matching
-platform fuel accounting and excluding debug-only execution.
+Use organiser SDK/CLI 2.2.5 and release mode, matching competition fuel rules.
+The evaluator runs each checked-in map from both sides, requires completed
+statistics, reconciles gem totals and checks our replay logs for API errors.
+Reports include score, collected/deposited/lost gems, deaths and fuel events.
 
-## How it works
+The original submission remains in
+[`submissions/v1-sprint-1-bot-update.zip`](../../submissions/v1-sprint-1-bot-update.zip).
+The two reproducible pressure opponents are documented under
+[`tests/opponents`](../../tests/opponents/README.md).
 
-1. **Draft reliable farmers.** Prefer Varg first on grouped camps and Vendetta
-   first on isolated camps, then the other, Ren, Tavi and Vesper Vale as team
-   size permits. Varg supplies splash and shields, Vendetta high single-target
-   damage and resets, Ren retaliation and mobility, Tavi field shopping, and
-   Vesper mobility and bonus gold.
-2. **Give each champion an objective.** Each champion reserves its camp using
-   one byte of the team's eight-byte shared memory. Other champions strongly
-   discount that camp. The bot retains its target between replans instead of
-   changing direction every turn.
-3. **Rank camps by useful income per time.** The estimate includes gems, gold,
-   actual walking distance, conservative clear time, capture delay, distance
-   to an altar, respawn timing, likely retaliation and nearby enemies. Gold
-   matters more before the first equipment upgrades. Monoliths are normally
-   avoided because ordinary camps are safer income.
-4. **Use the whole combat turn.** Attack, then choose the most useful legal
-   reset, damage spell, area hit, stun or shield. Varg aims attacks at camps
-   whose neighbors also take splash. Melee champions can walk and attack;
-   ranged movement and spell restrictions are respected. Enemy fights are
-   opportunistic, without long-distance pursuit.
-5. **Finish the job.** After killing a group, walk onto its original spawn
-   tiles and remain through capture. Extra allies do not make capture faster.
-   Channel timers are left running. Rewards are not treated as obtained until
-   the engine actually awards them.
-6. **Bank and grow.** Deposit near a convenient altar, with a bag of at least
-   100 gems, when the bag can finish the match, or before time runs out. Buy
-   damage first, obtain Monster/Jungle passives, and add Power health and
-   strength as the game progresses. Tavi buys in the field. Other champions
-   recall for substantial upgrades or healing, first escaping active threats.
-   They stay on spawn through turn end to receive healing.
-7. **Handle the exceptional map.** When all gem-bearing camps contain a
-   monolith, draft Tavi, Stellar, Prism, Cassi/Issac and Ren. Spellcasters buy
-   Focus and attack monoliths from range four; Issac farms ordinary resources
-   with Strength. The bundled 2.2.5 engine reports monolith attack range three,
-   verified through SDK design queries. This exception should be rechecked
-   if game balance changes.
+## Validation and submission
 
-Pathfinding uses SDK distance fields and fresh visible occupancy, with retries
-for hidden blockers. Large-map plans and routes can be retained to avoid
-repeating expensive work. Budget checks stop optional work, and a resumed turn
-refreshes its observations before following a stale plan. Wards extend personal
-vision; the bot does not assume allies share vision.
+`VALIDATION.json` records final source hashes, benchmark outcomes, fuel counts
+and the source ZIP checksum. Local full reports and replays are retained under
+ignored `matches/v2-final-*`. The archived benchmark summaries are under
+`tests/results/v2/`. These local opponents are regression tools, not a ranked
+win-rate or Elo prediction.
 
-## Validation
-
-The final source completed 102 full release-mode games: every checked-in map,
-once as each team, against each of three opponents.
-
-| Opponent | Wins | Games | Our runner crashes | Our caught API errors |
-| --- | ---: | ---: | ---: | ---: |
-| Checked-in C++ starter | 34 | 34 | 0 | 0 |
-| Original repository baseline | 34 | 34 | 0 | 0 |
-| Earlier improved farmer | 24 | 34 | 0 | 0 |
-
-These are deterministic local comparisons, not a tournament win-rate estimate.
-The stronger reference also uses camp reservations, spells, shields, equipment
-and a monolith-specific draft. It won ten games against this submission.
-
-Reports, per-match summaries and replay bundles are retained under ignored
-`matches/final-vs-starter/`, `matches/final-vs-original/` and
-`matches/final-vs-farmer/`. `VALIDATION.json` records the tested source hashes.
-The submission ZIP was also extracted into a separate project, rebuilt, and
-won four additional release-mode verification games on `packs` and `contest`,
-with both team positions checked and zero caught errors or crashes. Every
-bundled source file matched the hashes from the full benchmark.
-
-The runner recorded occasional fuel suspensions, primarily on the largest map;
-they are counted in the reports rather than hidden or treated as crashes.
-
-The test script runs both team positions, requires completed match summaries,
-checks our replay logs for caught errors, and returns a nonzero exit status for
-invalid checks. An alternative bot directory can be passed with `--opponent`.
-No authenticated competition upload is established by these local tests.
+The v2 source bundle is
+[`submissions/v2-sprint-2-bot-update.zip`](../../submissions/v2-sprint-2-bot-update.zip).
+It contains source files only. Its round-trip verification extracts the ZIP,
+rebuilds it as a separate bot and runs both sides on ordinary and boss maps.
+Build/test/package work does not establish a competition upload.

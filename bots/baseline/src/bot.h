@@ -22,14 +22,19 @@ class Bot {
         bool awake;
     };
     struct Enemy {
+        struct Spell { float damage = 0; int range = 0, cooldown = 0; bool stun = false; };
         cambc::champion view;
         cambc::vec2 position;
         float health, strength;
         int range;
+        std::array<Spell, 2> spells{};
+        bool stunned = false;
     };
+    struct Danger { cambc::vec2 position; int expires; };
     std::vector<Group> groups;
     std::vector<Camp> camps;
     std::vector<Enemy> enemies;
+    std::vector<Danger> dangers;
     cambc::bitboard terrain;
     cambc::distance_field altar_distance, home_distance, route_field;
     cambc::bitboard route_goals, route_visited;
@@ -45,12 +50,15 @@ class Bot {
     int slot = -1, target = -1, round = 0, decision_round = -100;
     int health_shards = 0, strength_shards = 0;
     cambc::vec2 position{};
+    cambc::vec2 bank_altar{-1, -1};
+    int bank_plan_round = -100, last_contact = -100;
     cambc::champion_type type{};
     float hp = 0, max_hp = 0, strength = 0, focus = 0;
     int attack_range = 1, width = 0, height = 0;
     std::vector<std::uint16_t> altar_values, home_values;
     bool boss_only = false;
     bool initialized = false, banking = false, recovering = false, moved = false, attacked = false;
+    bool was_alive = false;
 
     bool has_budget(unsigned minimum = 6000) const;
     void initialize();
@@ -61,10 +69,17 @@ class Bot {
     cambc::bitboard group_goals(int group) const;
     bool navigate(cambc::bitboard goals, bool dash = true, bool avoid_danger = false);
     bool bank();
+    bool escape();
+    bool engage();
     bool retreat();
-    bool combat(bool allow_enemies = true);
+    bool combat(bool allow_enemies = true, bool defensive = false);
     void ward();
     float incoming(cambc::vec2 position, int group = -1) const;
+    float enemy_pressure(cambc::vec2 position, int turns = 2) const;
+    float danger_memory(cambc::vec2 position) const;
+    float protection() const;
+    bool endangered() const;
+    void remember_danger();
     float estimated_dps(const Group& group) const;
     int choose_group();
 public:

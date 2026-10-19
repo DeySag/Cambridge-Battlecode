@@ -1,56 +1,76 @@
 {
+  "version": "v2 Sprint 2",
   "sdk_version": "2.2.5",
   "sdk_commit": "42d945e",
+  "engine_version": "0.0.3",
   "mode": "release",
   "maps": 17,
   "source_sha256": {
-    "src/bot.cpp": "af07e7452972f87f0b33bbe61aef5da4221f0aad213e6f6ec494470434567425",
-    "src/bot.h": "1c1d93086c33e75fb8c63c3130e2fc669c5c6c8a7be19810501474ef11761208",
-    "src/draft.cpp": "21d74631bd1e9729ef1dc4ef64aac5e987469e3e014e728f244e575a08d8b66e",
+    "src/bot.cpp": "b4e00c86a9f74fdb3f8d836b947ba234d10c1b7523ff69da3b1057d87a67f3f0",
+    "src/bot.h": "9d28f32ad9a118c9540bd8fa1742f1e0fda23e8bd314553f5caa560cbc30fc37",
+    "src/draft.cpp": "c942801c82cce6b55f1ed4a4e23294740f347502f12e7318b2f088bc9cab0de7",
     "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
     "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
     "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
   },
   "results": [
     {
-      "label": "final-vs-starter",
-      "wins": 34,
+      "opponent": "Sprint 1",
+      "wins": 30,
       "games": 34,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 17,
-      "report": "matches/final-vs-starter/report.json"
+      "fuel_suspensions": 29,
+      "report": "tests/results/v2/vs-sprint1.json"
     },
     {
-      "label": "final-vs-original",
-      "wins": 34,
+      "opponent": "Caster pressure",
+      "wins": 26,
       "games": 34,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 21,
-      "report": "matches/final-vs-original/report.json"
+      "fuel_suspensions": 31,
+      "report": "tests/results/v2/vs-pressure-caster.json"
     },
     {
-      "label": "final-vs-farmer",
+      "opponent": "Melee pressure",
       "wins": 24,
       "games": 34,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 14,
-      "report": "matches/final-vs-farmer/report.json"
+      "fuel_suspensions": 26,
+      "report": "tests/results/v2/vs-pressure-melee.json"
+    },
+    {
+      "opponent": "ZIP round trip",
+      "wins": 4,
+      "games": 4,
+      "crashes": 0,
+      "caught_errors": 0,
+      "fuel_suspensions": 0,
+      "report": "tests/results/v2/bundle-verification.json"
     }
   ],
-  "scope": "Local deterministic benchmarks; no tournament win-rate claim.",
-  "bundle_verification": {
-    "games": 4,
-    "wins": 4,
-    "invalid": 0,
-    "maps": [
-      "packs",
-      "contest"
-    ],
-    "mode": "release",
-    "rebuilt_from_extracted_zip": true
+  "final_candidate_games": 106,
+  "our_crashes": 0,
+  "our_caught_errors": 0,
+  "package": {
+    "path": "submissions/v2-sprint-2-bot-update.zip",
+    "bytes": 13043,
+    "sha256": "a25ec953026ac034463c65efe3895f3d5752d1f8ab618f4dad7453c5d3daa1a4",
+    "crc_verified": true,
+    "source_match_verified": true,
+    "extracted_rebuild_verified": true
   },
-  "bundle_sha256": "0c00900c5abe1f59c0c95f2feb539ae90b26d4313be8fc1f2c159193ea75d47c"
+  "reference_bundles": {
+    "submissions/v1-sprint-1-bot-update.zip": "0c00900c5abe1f59c0c95f2feb539ae90b26d4313be8fc1f2c159193ea75d47c",
+    "tests/opponents/pressure-caster.zip": "a30b7850e40de1db6811beed49c378e6bb4198081b7d555d97714d2ddc5ca278",
+    "tests/opponents/pressure-melee.zip": "409c9c0b668ce8b7cc64e6526198657c4745d02be7a7185c59ea458a93f66ad0"
+  },
+  "limitations": [
+    "Local fixed-map tests are not a tournament win-rate or Elo estimate.",
+    "Expanse and rows still lost both sides against Sprint 1.",
+    "Fuel suspensions remain and are counted separately from faults.",
+    "No authenticated competition upload was performed."
+  ]
 }

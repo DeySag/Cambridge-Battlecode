@@ -120,27 +120,42 @@ void Bot::observe() {
     }
     for (const auto& enemy : bc::vision::champions(bc::team::enemy)) {
         if (!enemy.is_alive()) continue;
-        enemies.push_back({enemy, enemy.position(), enemy.health(), enemy.strength(), enemy.attack_range()});
+        Enemy seen{enemy, enemy.position(), enemy.health(), enemy.strength(), enemy.attack_range()};
+        seen.stunned = enemy.buffs().has_stun();
+        const auto abilities = enemy.abilities();
+        for (int i = 0; i < 2; ++i) {
+            const auto& ability = abilities[i];
+            if (!ability.info()) continue;
+            auto& spell = seen.spells[i];
+            spell.cooldown = ability.cooldown();
+            if (ability.is_attack_reset()) { spell.damage = seen.strength; spell.range = seen.range; }
+            else if (ability.is_damage() || ability.is_cc() || ability.is_aoe_damage()) {
+                spell.damage = ability.damage_amount();
+                spell.stun = ability.is_cc();
+                std::visit([&](const auto& info) {
+                    if constexpr (requires { info.range; }) spell.range = int(std::ceil(info.range));
+                    if constexpr (requires { info.radius; }) spell.range += int(std::ceil(info.radius));
+                    if constexpr (requires { info.duration; }) spell.stun |= info.duration > 0;
+                }, *ability.info());
+            }
+        }
+        enemies.push_back(seen);
     }
+    if (!enemies.empty()) last_contact = round;
+    std::erase_if(dangers, [&](const auto& danger) { return danger.expires <= round; });
 }
 
 void Bot::shop() {
     stage = "shop";
     auto& me = bc::self();
-    // Damage buys faster clears, less retaliation and earlier income. Acquire
-    // different passives once, then use Power's extra stat point.
+    // Power increases both farming and player damage. Add health gradually;
+    // spellcasters buy Focus while basic attackers buy Strength.
     for (int n = 0; n < 40 && me.gold_count() >= 30; ++n) {
-        const bool caster = (boss_only && type != bc::champion_type::issac) || type == bc::champion_type::stellar || type == bc::champion_type::cassi || type == bc::champion_type::prism;
+        const bool caster = (boss_only && type != bc::champion_type::issac) || type == bc::champion_type::stellar
+            || type == bc::champion_type::cassi || type == bc::champion_type::prism || type == bc::champion_type::tavi;
         const bool health = !boss_only && strength_shards >= 5 && health_shards * 4 < strength_shards;
-        bc::item_type item = bc::item_type::power_shard_of_strength;
-        if (health) item = bc::item_type::power_shard_of_health;
-        else if (strength_shards < 5) item = bc::item_type::monster_shard_of_strength;
-        else if (!boss_only && strength_shards < 10 && health_shards < 5) item = bc::item_type::jungle_shard_of_strength;
-        if (caster && !health) {
-            if (strength_shards < 5) item = bc::item_type::monster_shard_of_focus;
-            else if (strength_shards < 10) item = bc::item_type::treasure_shard_of_focus;
-            else item = bc::item_type::power_shard_of_focus;
-        }
+        const bc::item_type item = health ? bc::item_type::power_shard_of_health
+            : caster ? bc::item_type::power_shard_of_focus : bc::item_type::power_shard_of_strength;
         if (!me.can_buy(item)) break;
         me.buy(item);
         if (health) ++health_shards; else ++strength_shards;
@@ -151,7 +166,13 @@ void Bot::shop() {
 bc::bitboard Bot::blocked(bool avoid_danger) const {
     auto result = terrain | bc::vision::champion_tiles() | bc::vision::camp_tiles() | bc::vision::teleport_tiles();
     if (avoid_danger) {
-        for (const auto& enemy : enemies) result |= around(enemy.position, enemy.range + 1);
+        for (const auto& enemy : enemies) {
+            if (enemy.stunned || enemy.health < strength * 1.2f) continue;
+            int reach = enemy.range + 1;
+            for (const auto& spell : enemy.spells)
+                if (spell.cooldown <= 2) reach = std::max(reach, spell.range);
+            result |= around(enemy.position, reach);
+        }
     }
     result.set(position, false);
     return result;
@@ -162,9 +183,55 @@ float Bot::incoming(vec2 position, int group) const {
     for (const auto& camp : camps)
         if (camp.awake && (group < 0 || camp.group == group) && distance(position, camp.position) <= camp.range)
             damage += camp.damage;
-    for (const auto& enemy : enemies)
-        if (distance(position, enemy.position) <= enemy.range + 1) damage += enemy.strength * 1.3f + 15;
+    return damage + enemy_pressure(position, 1);
+}
+
+float Bot::enemy_pressure(vec2 tile, int turns) const {
+    float damage = 0;
+    for (const auto& enemy : enemies) {
+        const int gap = distance(tile, enemy.position);
+        float basic = gap <= enemy.range + 1 ? enemy.strength * turns : 0;
+        float spell_damage = 0;
+        // The two slots share one cast per turn. Do not sum two simultaneous casts.
+        for (const auto& spell : enemy.spells) {
+            if (spell.range == 0 || gap > spell.range + (turns > 1 ? 1 : 0)) continue;
+            const float readiness = spell.cooldown < turns ? 1.0f : spell.cooldown <= turns + 1 ? 0.35f : 0.0f;
+            const float reach = gap <= spell.range ? 1.0f : 0.5f;
+            const float value = spell.damage + (spell.stun ? enemy.strength * 0.8f : 0);
+            spell_damage = std::max(spell_damage, value * readiness * reach);
+        }
+        damage += (basic + spell_damage) * (enemy.stunned ? 0.35f : 1.0f);
+    }
     return damage;
+}
+
+float Bot::protection() const {
+    const auto buffs = bc::self().buffs();
+    float shield = buffs.has_shield() ? buffs.get<bc::buff_shield>().value : 0;
+    for (const auto& ability : bc::self().abilities())
+        if (ability.is_shield() && ability.is_ready() && !buffs.has_shield()) shield += ability.shield_amount() * 0.8f;
+    return hp + shield;
+}
+
+bool Bot::endangered() const {
+    const float threat = enemy_pressure(position, 2);
+    return threat > 0 && (threat * 1.35f > protection()
+        || (hp < max_hp * 0.55f && threat > hp * 0.5f));
+}
+
+void Bot::remember_danger() {
+    if (dangers.size() >= 6) dangers.erase(dangers.begin());
+    dangers.push_back({position, round + 180});
+}
+
+float Bot::danger_memory(vec2 tile) const {
+    float penalty = 1;
+    for (const auto& danger : dangers)
+        if (distance(tile, danger.position) <= 6) {
+            const float remaining = std::clamp(float(danger.expires - round) / 120, 0.0f, 1.0f);
+            penalty *= 1 - 0.75f * remaining;
+        }
+    return std::max(0.06f, penalty);
 }
 
 bool Bot::navigate(bc::bitboard goals, bool dash, bool avoid_danger) {
@@ -188,7 +255,6 @@ bool Bot::navigate(bc::bitboard goals, bool dash, bool avoid_danger) {
     }
     if (!route_visited.is_set(position)) {
         route_valid = false;
-        if (avoid_danger && has_budget(15000)) return navigate(goals, dash, false);
         return false;
     }
     auto& field = route_field;
@@ -197,8 +263,10 @@ bool Bot::navigate(bc::bitboard goals, bool dash, bool avoid_danger) {
     for (auto delta : field.next_moves_from(position)) {
         const auto next = position + delta;
         if (walls.is_set(next)) continue;
+        if (!has_budget(1000) || !me.is_alive() || !me.can_move()) return false;
         if (me.move(delta)) { position += delta; moved = true; success = true; break; }
-        walls.set(next); // Hidden obstruction: try a different optimal step.
+        walls |= blocked(); // A failed move can reveal several previously hidden units.
+        walls.set(next);
     }
     if (!success) route_valid = false;
     if (!dash || !me.can_cast() || goals.is_set(position) || bc::fuel_remaining() < 22000) return success;
@@ -216,6 +284,7 @@ bool Bot::navigate(bc::bitboard goals, bool dash, bool avoid_danger) {
         const int current_distance = field.get(position);
         for (auto [cost, tile] : options) {
             if (cost + 1 >= current_distance) continue;
+            if (!has_budget(1000) || !me.is_alive() || !me.can_cast()) return success;
             if (ability.use(tile)) { position = tile; return true; }
         }
     }
@@ -320,6 +389,8 @@ int Bot::choose_group() {
         if (risk > hp * 0.85f) score *= std::max(0.06f, hp * 0.55f / std::max(1.0f, risk));
         for (const auto& enemy : enemies)
             if (distance(enemy.position, group.center) <= 5 && enemy.health > hp * 0.8f) score *= 0.45f;
+        score *= danger_memory(group.center);
+        if (enemy_pressure(group.center, 2) > hp * 0.55f) score *= 0.25f;
         if (i == target) score *= 1.25f;
         // Prefer our side early, without permanently giving up the middle.
         const auto start = group.tiles.front();
@@ -338,9 +409,34 @@ bool Bot::bank() {
     stage = "bank";
     auto& me = bc::self();
     reserve(-1);
-    if (me.gem_count() == 0) { banking = false; return false; }
+    if (me.gem_count() == 0) { banking = false; bank_altar = {-1, -1}; return false; }
+    if (bank_altar.x < 0 || round - bank_plan_round >= 16) {
+        if (!has_budget(22000)) return true;
+        bc::distance_field travel;
+        bc::bitboard visited;
+        travel.compute(terrain, around(position, 0), visited);
+        bank_plan_round = round;
+        bank_altar = {-1, -1};
+        float best = std::numeric_limits<float>::max();
+        for (auto altar : bc::map::altars().positions()) {
+            float cost = std::numeric_limits<float>::max();
+            for (auto tile : (around(altar, bc::constants::submit_gems_range) & ~terrain).positions()) {
+                if (!visited.is_set(tile)) continue;
+                const float risk = enemy_pressure(tile, 3);
+                cost = std::min(cost, travel.get(tile) + risk * 0.09f
+                    + (1 - danger_memory(tile)) * 24);
+            }
+            for (const auto& lock : bc::vision::altar_locks(bc::team::enemy))
+                if (lock.position() == altar) cost += 5 * lock.hits_remaining();
+            if (cost < best) { best = cost; bank_altar = altar; }
+        }
+        route_valid = false;
+        if (!has_budget(14000)) return true;
+    }
+    if (bank_altar.x < 0) { retreat(); return true; }
     bc::bitboard goals;
     for (auto altar : bc::map::altars().positions()) {
+        if (altar != bank_altar) continue;
         if (distance(position, altar) <= bc::constants::submit_gems_range) {
             std::optional<bc::altar_lock> hostile;
             for (const auto& lock : bc::vision::altar_locks(bc::team::enemy))
@@ -359,6 +455,12 @@ bool Bot::bank() {
                     }
                 }
             } else {
+                // Long channels are unsafe under active pressure, even with a healthy bag.
+                if (enemy_pressure(position, 3) > protection() * 0.7f) {
+                    bank_altar = {-1, -1};
+                    escape();
+                    return true;
+                }
                 if (me.consumables()[bc::consumable_type::altar_lock].count() > 0) {
                     bool already = false;
                     for (const auto& lock : bc::vision::altar_locks(bc::team::ally)) already |= lock.position() == altar;
@@ -368,32 +470,120 @@ bool Bot::bank() {
             }
             return true;
         }
-        goals |= around(altar, bc::constants::submit_gems_range);
+        for (auto tile : (around(altar, bc::constants::submit_gems_range) & ~terrain).positions())
+            if (enemy_pressure(tile, 2) < protection() * 0.6f) goals.set(tile);
     }
-    navigate(goals, true, !enemies.empty());
+    if (!navigate(goals, true, !enemies.empty())) {
+        bank_altar = {-1, -1};
+        if (enemy_pressure(position, 2) > 0) escape();
+        else if (!enemies.empty()) retreat();
+    }
     // Melee champions may clear an obstruction without delaying their delivery.
     if (attack_range == 1) combat(false);
     return true;
+}
+
+bool Bot::escape() {
+    stage = "escape";
+    auto& me = bc::self();
+    if (!has_budget(10000) || !me.is_alive()) return false;
+    // A shield is compatible with walking. Prefer it before taking another hit.
+    for (const auto& ability : me.abilities())
+        if (me.can_cast() && ability.is_shield() && ability.is_ready()
+            && incoming(position) > 0 && !me.buffs().has_shield()) { ability.use(); break; }
+    auto walls = blocked();
+    auto cost = [&](vec2 tile) {
+        float value = enemy_pressure(tile, 2) * 3;
+        for (const auto& camp : camps)
+            if (camp.awake && distance(tile, camp.position) <= camp.range) value += camp.damage * 3;
+        // Continuous separation breaks ties inside a large enemy attack zone.
+        for (const auto& enemy : enemies) value += std::max(0, 9 - distance(tile, enemy.position)) * 12;
+        value += home_values[tile.y * width + tile.x] * 0.3f;
+        return value;
+    };
+    bool success = false;
+    if (me.can_move()) {
+        stage = "escape walk";
+        std::vector<std::pair<float, vec2>> steps;
+        for (auto tile : (around(position, 1) & ~walls).positions())
+            if (tile != position) steps.emplace_back(cost(tile), tile);
+        std::sort(steps.begin(), steps.end());
+        for (auto [value, tile] : steps) {
+            if (value > cost(position) + 1) break;
+            if (walls.is_set(tile)) continue;
+            if (!has_budget(1000) || !me.is_alive() || !me.can_move()) return success;
+            if (me.move(tile - position)) { position = tile; moved = true; success = true; break; }
+            walls |= blocked();
+        }
+    }
+    if (me.can_cast() && has_budget(10000)) {
+        stage = "escape dash";
+        for (const auto& ability : me.abilities()) {
+            if (!ability.is_dash() || !ability.is_ready()) continue;
+            auto dash_walls = bc::map::walls() | bc::map::altars() | bc::map::spawn_region(bc::team::enemy)
+                | bc::vision::champion_tiles() | bc::vision::camp_tiles() | bc::vision::teleport_tiles();
+            dash_walls.set(position, false);
+            std::vector<std::pair<float, vec2>> options;
+            for (auto tile : (dash_walls.reachable_tiles(position, 2) & ability.valid_tiles() & ~blocked()).positions())
+                if (tile != position) options.emplace_back(cost(tile), tile);
+            std::sort(options.begin(), options.end());
+            for (auto [value, tile] : options) {
+                if (value >= cost(position) - 5) break;
+                if (blocked().is_set(tile)) continue;
+                if (!has_budget(1000) || !me.is_alive() || !me.can_cast()) return success;
+                if (ability.use(tile)) { position = tile; success = true; break; }
+            }
+            break;
+        }
+    }
+    if (has_budget(10000)) { stage = "escape defense"; combat(true, true); }
+    return success;
 }
 
 bool Bot::retreat() {
     stage = "retreat";
     auto& me = bc::self();
     reserve(-1);
-    bool threatened = incoming(position) > 0;
     if (bc::map::spawn_region(bc::team::ally).is_set(position)) return true;
-    if (!threatened) { me.recall(); return true; }
-    bc::bitboard safe;
-    auto walls = blocked();
-    for (auto tile : walls.reachable_tiles(position, 4).positions())
-        if (incoming(tile) < 0.01f) safe.set(tile);
-    if (!safe.is_empty()) navigate(safe, true, true);
-    else navigate(bc::map::spawn_region(bc::team::ally), true, true);
-    if (incoming(position) == 0) me.recall();
+    if (incoming(position) > 0 || enemy_pressure(position, 2) > 0) escape();
+    if (has_budget(6000) && me.is_alive() && incoming(position) == 0 && enemy_pressure(position, 2) == 0
+        && (me.can_move() || me.can_attack() || me.can_cast())) { stage = "retreat recall"; me.recall(); }
     return true;
 }
 
-bool Bot::combat(bool allow_enemies) {
+bool Bot::engage() {
+    auto& me = bc::self();
+    if (!has_budget(18000) || enemies.empty() || banking || hp < max_hp * 0.42f || me.gem_count() >= 80) return false;
+    if (target >= 0 && groups[target].state == 2 && !endangered()
+        && std::find(groups[target].tiles.begin(), groups[target].tiles.end(), position) != groups[target].tiles.end()) return false;
+    const Enemy* chosen = nullptr;
+    float best = -1;
+    for (const auto& enemy : enemies) {
+        // Spawn heals can make an idle enemy an endless, unproductive target.
+        if (bc::map::spawn_region(bc::team::enemy).is_set(enemy.position)) continue;
+        if (distance(position, enemy.position) > 7) continue;
+        float friendly = hp + strength * 4 + focus;
+        float hostile = 0;
+        for (const auto& ally : bc::vision::champions(bc::team::ally))
+            if (ally != me && ally.is_alive() && distance(ally.position(), enemy.position) <= 6)
+                friendly += ally.health() + ally.strength() * 4 + ally.focus();
+        for (const auto& other : enemies)
+            if (distance(other.position, enemy.position) <= 6) hostile += other.health + other.strength * 4 + other.view.focus();
+        if (friendly < hostile * 0.92f && enemy.health > strength * 2 + focus * 1.5f) continue;
+        const float score = 300 + enemy.view.gem_count() * 5 - enemy.health * 0.08f
+            - distance(position, enemy.position) * 20;
+        if (score > best) { best = score; chosen = &enemy; }
+    }
+    if (!chosen) return false;
+    if (!has_budget(13000)) return false;
+    target = -1; reserve(-1);
+    bool acted = combat(true, true);
+    if (me.is_alive() && has_budget(14000) && me.can_move()) acted |= navigate(around(chosen->position, attack_range));
+    if (me.is_alive() && has_budget(10000)) acted |= combat(true, true);
+    return acted;
+}
+
+bool Bot::combat(bool allow_enemies, bool defensive) {
     stage = "combat";
     if (!has_budget(12000)) return false;
     auto& me = bc::self();
@@ -405,14 +595,16 @@ bool Bot::combat(bool allow_enemies) {
         float best = 0;
         for (const auto& enemy : enemies) {
             if (!enemy.view.is_visible()) continue;
+            if (bc::map::spawn_region(bc::team::enemy).is_set(enemy.position)) continue;
             if (distance(position, enemy.position) > std::max(4, attack_range)) continue;
             const bool lethal = enemy.health <= strength * 2 + focus * 1.5f;
-            if (!lethal && (hp < enemy.health * 0.85f || me.gem_count() >= 100)) continue;
+            if (!defensive && !lethal && (hp < max_hp * 0.35f || me.gem_count() >= 100)) continue;
             const float score = (lethal ? 1000.0f : 0) + enemy.view.gem_count() * 3 + 250 - enemy.health * 0.1f;
             if (score > best) { best = score; foe = &enemy; }
         }
     }
     auto select_camp = [&]() -> std::optional<bc::camp> {
+        if (defensive) return std::nullopt;
         float best = -1;
         std::optional<bc::camp> chosen;
         for (const auto& camp : camps) {
@@ -435,7 +627,9 @@ bool Bot::combat(bool allow_enemies) {
     if (me.can_attack()) {
         if (foe && foe->view.is_visible() && distance(position, foe->position) <= attack_range) {
             me.attack(foe->view); attacked = true; acted = true;
-        } else if (const auto camp = select_camp()) { me.attack(*camp); attacked = true; acted = true; }
+        } else if (const auto camp = select_camp(); camp && has_budget(5000) && me.is_alive() && me.can_attack()) {
+            me.attack(*camp); attacked = true; acted = true;
+        }
     }
     if (!me.is_alive() || !me.can_cast()) return acted;
     // Score reset, damage, CC, area hits and sustain in comparable damage units.
@@ -473,11 +667,14 @@ bool Bot::combat(bool allow_enemies) {
         } else if (ability.is_damage() || ability.is_cc() || ability.is_aoe_damage()) {
             const auto mask = ability.valid_tiles();
             const float damage = ability.damage_amount();
-            if (foe && foe->view.is_visible() && ability.can_target_enemies() && mask.is_set(foe->position)) {
-                e = foe->view;
-                score = std::min(foe->view.health(), damage) * 1.3f + (ability.is_cc() ? 35 : 0);
+            if (foe && foe->view.is_visible() && (ability.can_target_enemies() || ability.can_target_ground()) && mask.is_set(foe->position)) {
+                if (ability.can_target_ground()) p = foe->position;
+                else e = foe->view;
+                score = std::min(foe->view.health(), damage) * 1.3f
+                    + (ability.is_cc() ? (defensive ? 100 + foe->strength : 35) : 0);
             }
             for (const auto& camp : camps) {
+                if (defensive) break;
                 if (bc::fuel_remaining() < 8000) break;
                 if (target >= 0 && camp.group != target) continue;
                 if (!mask.is_set(camp.position) || !bc::vision::has_camp(camp.position)) continue;
@@ -499,6 +696,7 @@ bool Bot::combat(bool allow_enemies) {
         if (score > best) { best = score; chosen_slot = slot_id; ground = p; unit_camp = c; unit_enemy = e; }
     }
     if (chosen_slot < 0) return acted;
+    if (!has_budget(4000) || !me.is_alive() || !me.can_cast()) return acted;
     const auto& ability = abilities[chosen_slot];
     if (ability.is_attack_reset() || ability.is_shield()) ability.use();
     else if (ground) ability.use(*ground);
@@ -538,20 +736,40 @@ void Bot::play_turn() {
         position = me.position(); hp = me.health(); max_hp = me.max_health();
         strength = me.strength(); focus = me.focus(); attack_range = me.attack_range();
     }
-    if (!me.is_alive()) { reserve(-1); target = -1; recovering = false; banking = false; route_valid = false; choice_ready = false; return; }
+    if (!me.is_alive()) {
+        if (was_alive) remember_danger();
+        was_alive = false;
+        reserve(-1); target = -1; recovering = false; banking = false;
+        bank_altar = {-1, -1}; route_valid = false; choice_ready = false; return;
+    }
+    was_alive = true;
     const bool spawn = bc::map::spawn_region(bc::team::ally).is_set(position);
-    if (me.is_recalling() || me.is_submitting_gems() || me.is_teleporting()) { reserve(-1); return; }
+    if (me.is_teleporting()) { reserve(-1); return; }
     if (spawn) {
         recovering = false;
         if (hp < max_hp * 0.99f) { reserve(-1); return; }
     }
-    if (!me.can_move() && !me.can_attack() && !me.can_cast()) return;
     observe();
     if (!has_budget(12000)) return;
+    if (me.is_recalling() || me.is_submitting_gems()) {
+        reserve(-1);
+        const int remaining = me.remaining_channel_time();
+        const float threat = enemy_pressure(position, std::min(5, remaining + 1));
+        // Damage does not cancel tribute. Keep a nearly completed, survivable channel.
+        if (threat > protection() * 0.85f && remaining > 1) {
+            if (me.is_recalling()) me.cancel_recall(); else me.cancel_submit_gems();
+            bank_altar = {-1, -1};
+            target = -1;
+            escape();
+        }
+        return;
+    }
+    if (!me.can_move() && !me.can_attack() && !me.can_cast()) return;
+    if (!recovering && engage()) return;
     // Finishing a camp is often safer than abandoning it, but never gamble the bag.
     float remaining = target >= 0 ? groups[target].health / estimated_dps(groups[target]) : 100;
-    const float danger = incoming(position, target);
-    const bool urgent = danger > 0 && hp < std::max(130.0f, danger * 2.2f);
+    const float camp_danger = incoming(position, target) - enemy_pressure(position, 1);
+    const bool urgent = endangered() || (camp_danger > 0 && hp < std::max(130.0f, camp_danger * 2.2f));
     const bool low = hp < max_hp * 0.28f && remaining > 3;
     if (!spawn && (recovering || urgent || low)) {
         recovering = true; target = -1;
@@ -562,11 +780,15 @@ void Bot::play_turn() {
         for (auto tile : groups[target].tiles)
             if (tile == position) { reserve(target); combat(); return; }
     }
-    if (me.gem_count() == 0) banking = false;
+    if (me.gem_count() == 0) { banking = false; bank_altar = {-1, -1}; }
     const int bank_distance = altar_values[position.y * width + position.x];
-    if (me.gem_count() > 0 && (banking || me.gem_count() >= 100 || bank_distance <= 3
+    const bool exposed_bag = me.gem_count() >= 44 && round - last_contact < 20 && bank_distance <= 18
+        && (hp < max_hp * 0.65f || enemy_pressure(position, 2) > hp * 0.25f);
+    const bool convenient_bag = me.gem_count() >= 50 && bank_distance <= 10;
+    if (me.gem_count() > 0 && (banking || me.gem_count() >= 100 || bank_distance <= 3 || exposed_bag || convenient_bag
         || me.gem_count() + bc::global_submitted_gems(bc::team::ally) >= bc::constants::winning_gems
         || round + bank_distance + int(me.gem_count() / 10) + 15 >= int(bc::constants::max_rounds))) {
+        if (!banking) bank_altar = {-1, -1};
         banking = true; target = -1; bank(); return;
     }
     // Recall for a meaningful power spike, not after every small gold reward.
@@ -585,7 +807,8 @@ void Bot::play_turn() {
     }
     reserve(target);
     if (groups[target].state == 2) {
-        navigate(group_goals(target));
+        if (!navigate(group_goals(target), true, enemy_pressure(groups[target].center, 2) > hp * 0.35f)
+            && enemy_pressure(position, 2) > protection() * 0.5f) escape();
         combat();
         return;
     }
@@ -600,7 +823,15 @@ void Bot::play_turn() {
         const auto state = groups[target].view.state();
         if (std::holds_alternative<bc::map::camp_group_reward_available>(state)) groups[target].state = 2;
     }
-    if (me.can_move()) navigate(group_goals(target));
+    if (me.can_move()) {
+        const bool caution = !enemies.empty() && enemy_pressure(groups[target].center, 2) > protection() * 0.65f
+            && (me.gem_count() >= 22 || hp < max_hp * 0.7f);
+        if (!navigate(group_goals(target), true, caution) && caution && !groups[target].tiles.empty()
+            && distance(position, groups[target].center) > attack_range + 1) {
+            target = -1; decision_round = -100; reserve(-1);
+            if (enemy_pressure(position, 2) > 0) escape();
+        }
+    }
     if (!has_budget(10000)) return;
     if (me.can_attack() || me.can_cast()) combat();
     if (bc::fuel_remaining() > 20000) ward();

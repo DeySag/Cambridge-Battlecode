@@ -1,0 +1,594 @@
+{
+  "candidate": "/workspace/.setup/variants/sprint1-ranked/bots/baseline",
+  "opponent": "/workspace/.setup/variants/pressure-melee-v1/bots/baseline",
+  "sdk": "sdk_version = \"2.2.5\"\nlanguages = [\"cpp\",\"python\"]\n",
+  "candidate_sources_sha256": {
+    "src/bot.cpp": "af07e7452972f87f0b33bbe61aef5da4221f0aad213e6f6ec494470434567425",
+    "src/bot.h": "1c1d93086c33e75fb8c63c3130e2fc669c5c6c8a7be19810501474ef11761208",
+    "src/draft.cpp": "21d74631bd1e9729ef1dc4ef64aac5e987469e3e014e728f244e575a08d8b66e",
+    "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+    "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
+    "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
+  },
+  "wins": 0,
+  "games": 16,
+  "invalid": 0,
+  "results": [
+    {
+      "map": "collision",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 437,
+      "seed": "14621398811092091047",
+      "gems": {
+        "teamA": 22,
+        "teamB": 1022
+      },
+      "crashes": 0,
+      "deaths": 9,
+      "our": {
+        "collectedGems": 408,
+        "submittedGems": 22,
+        "gems": 0,
+        "deaths": 9,
+        "kills": 0,
+        "lostGems": 386,
+        "conversion": 0.05392156862745098
+      },
+      "enemy": {
+        "collectedGems": 1022,
+        "submittedGems": 1022,
+        "gems": 0,
+        "deaths": 1,
+        "kills": 8,
+        "lostGems": 0,
+        "conversion": 1.0
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "collision",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 471,
+      "seed": "14621398811092091047",
+      "gems": {
+        "teamA": 1122,
+        "teamB": 66
+      },
+      "crashes": 0,
+      "deaths": 11,
+      "our": {
+        "collectedGems": 480,
+        "submittedGems": 66,
+        "gems": 0,
+        "deaths": 11,
+        "kills": 0,
+        "lostGems": 414,
+        "conversion": 0.1375
+      },
+      "enemy": {
+        "collectedGems": 1202,
+        "submittedGems": 1122,
+        "gems": 80,
+        "deaths": 0,
+        "kills": 11,
+        "lostGems": 0,
+        "conversion": 0.9334442595673876
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "packs",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 392,
+      "seed": "15310087145487291355",
+      "gems": {
+        "teamA": 44,
+        "teamB": 1040
+      },
+      "crashes": 0,
+      "deaths": 12,
+      "our": {
+        "collectedGems": 408,
+        "submittedGems": 44,
+        "gems": 0,
+        "deaths": 12,
+        "kills": 0,
+        "lostGems": 364,
+        "conversion": 0.10784313725490197
+      },
+      "enemy": {
+        "collectedGems": 1128,
+        "submittedGems": 1040,
+        "gems": 88,
+        "deaths": 0,
+        "kills": 12,
+        "lostGems": 0,
+        "conversion": 0.9219858156028369
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "packs",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 405,
+      "seed": "15310087145487291355",
+      "gems": {
+        "teamA": 1026,
+        "teamB": 158
+      },
+      "crashes": 0,
+      "deaths": 9,
+      "our": {
+        "collectedGems": 448,
+        "submittedGems": 158,
+        "gems": 0,
+        "deaths": 9,
+        "kills": 0,
+        "lostGems": 290,
+        "conversion": 0.35267857142857145
+      },
+      "enemy": {
+        "collectedGems": 1070,
+        "submittedGems": 1026,
+        "gems": 44,
+        "deaths": 0,
+        "kills": 8,
+        "lostGems": 0,
+        "conversion": 0.9588785046728971
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "interlock",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 472,
+      "seed": "11615972941345794707",
+      "gems": {
+        "teamA": 0,
+        "teamB": 1008
+      },
+      "crashes": 0,
+      "deaths": 19,
+      "our": {
+        "collectedGems": 402,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 19,
+        "kills": 1,
+        "lostGems": 402,
+        "conversion": 0.0
+      },
+      "enemy": {
+        "collectedGems": 1074,
+        "submittedGems": 1008,
+        "gems": 0,
+        "deaths": 1,
+        "kills": 15,
+        "lostGems": 66,
+        "conversion": 0.9385474860335196
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "interlock",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 528,
+      "seed": "11615972941345794707",
+      "gems": {
+        "teamA": 1020,
+        "teamB": 198
+      },
+      "crashes": 0,
+      "deaths": 15,
+      "our": {
+        "collectedGems": 634,
+        "submittedGems": 198,
+        "gems": 0,
+        "deaths": 15,
+        "kills": 1,
+        "lostGems": 436,
+        "conversion": 0.31230283911671924
+      },
+      "enemy": {
+        "collectedGems": 1174,
+        "submittedGems": 1020,
+        "gems": 44,
+        "deaths": 3,
+        "kills": 15,
+        "lostGems": 110,
+        "conversion": 0.868824531516184
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "pilgrimage",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 630,
+      "seed": "3560891471419268262",
+      "gems": {
+        "teamA": 0,
+        "teamB": 1024
+      },
+      "crashes": 0,
+      "deaths": 17,
+      "our": {
+        "collectedGems": 306,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 17,
+        "kills": 1,
+        "lostGems": 306,
+        "conversion": 0.0
+      },
+      "enemy": {
+        "collectedGems": 1058,
+        "submittedGems": 1024,
+        "gems": 0,
+        "deaths": 1,
+        "kills": 17,
+        "lostGems": 34,
+        "conversion": 0.9678638941398866
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 1
+    },
+    {
+      "map": "pilgrimage",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 775,
+      "seed": "3560891471419268262",
+      "gems": {
+        "teamA": 1000,
+        "teamB": 17
+      },
+      "crashes": 0,
+      "deaths": 20,
+      "our": {
+        "collectedGems": 636,
+        "submittedGems": 17,
+        "gems": 68,
+        "deaths": 20,
+        "kills": 0,
+        "lostGems": 551,
+        "conversion": 0.026729559748427674
+      },
+      "enemy": {
+        "collectedGems": 1187,
+        "submittedGems": 1000,
+        "gems": 187,
+        "deaths": 0,
+        "kills": 20,
+        "lostGems": 0,
+        "conversion": 0.8424599831508003
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 1
+    },
+    {
+      "map": "swirl",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 534,
+      "seed": "969604683390593967",
+      "gems": {
+        "teamA": 18,
+        "teamB": 1034
+      },
+      "crashes": 0,
+      "deaths": 25,
+      "our": {
+        "collectedGems": 168,
+        "submittedGems": 18,
+        "gems": 0,
+        "deaths": 25,
+        "kills": 3,
+        "lostGems": 150,
+        "conversion": 0.10714285714285714
+      },
+      "enemy": {
+        "collectedGems": 1358,
+        "submittedGems": 1034,
+        "gems": 324,
+        "deaths": 3,
+        "kills": 23,
+        "lostGems": 0,
+        "conversion": 0.7614138438880707
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "swirl",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 517,
+      "seed": "969604683390593967",
+      "gems": {
+        "teamA": 1066,
+        "teamB": 176
+      },
+      "crashes": 0,
+      "deaths": 25,
+      "our": {
+        "collectedGems": 308,
+        "submittedGems": 176,
+        "gems": 0,
+        "deaths": 25,
+        "kills": 3,
+        "lostGems": 132,
+        "conversion": 0.5714285714285714
+      },
+      "enemy": {
+        "collectedGems": 1374,
+        "submittedGems": 1066,
+        "gems": 132,
+        "deaths": 3,
+        "kills": 24,
+        "lostGems": 176,
+        "conversion": 0.7758369723435226
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "stampede",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 1131,
+      "seed": "7001591038506663979",
+      "gems": {
+        "teamA": 0,
+        "teamB": 1080
+      },
+      "crashes": 0,
+      "deaths": 51,
+      "our": {
+        "collectedGems": 0,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 51,
+        "kills": 4,
+        "lostGems": 0,
+        "conversion": null
+      },
+      "enemy": {
+        "collectedGems": 1080,
+        "submittedGems": 1080,
+        "gems": 0,
+        "deaths": 4,
+        "kills": 51,
+        "lostGems": 0,
+        "conversion": 1.0
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "stampede",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 1028,
+      "seed": "7001591038506663979",
+      "gems": {
+        "teamA": 1080,
+        "teamB": 0
+      },
+      "crashes": 0,
+      "deaths": 43,
+      "our": {
+        "collectedGems": 0,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 43,
+        "kills": 1,
+        "lostGems": 0,
+        "conversion": null
+      },
+      "enemy": {
+        "collectedGems": 1080,
+        "submittedGems": 1080,
+        "gems": 0,
+        "deaths": 2,
+        "kills": 42,
+        "lostGems": 0,
+        "conversion": 1.0
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "contest",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 953,
+      "seed": "11295110919520135683",
+      "gems": {
+        "teamA": 0,
+        "teamB": 1000
+      },
+      "crashes": 0,
+      "deaths": 63,
+      "our": {
+        "collectedGems": 0,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 63,
+        "kills": 3,
+        "lostGems": 0,
+        "conversion": null
+      },
+      "enemy": {
+        "collectedGems": 1000,
+        "submittedGems": 1000,
+        "gems": 0,
+        "deaths": 3,
+        "kills": 52,
+        "lostGems": 0,
+        "conversion": 1.0
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "contest",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 1246,
+      "seed": "11295110919520135683",
+      "gems": {
+        "teamA": 1000,
+        "teamB": 400
+      },
+      "crashes": 0,
+      "deaths": 44,
+      "our": {
+        "collectedGems": 1400,
+        "submittedGems": 400,
+        "gems": 0,
+        "deaths": 44,
+        "kills": 19,
+        "lostGems": 1000,
+        "conversion": 0.2857142857142857
+      },
+      "enemy": {
+        "collectedGems": 1800,
+        "submittedGems": 1000,
+        "gems": 0,
+        "deaths": 25,
+        "kills": 36,
+        "lostGems": 800,
+        "conversion": 0.5555555555555556
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "eight",
+      "side": "A",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamB",
+      "rounds": 531,
+      "seed": "7339465376952007826",
+      "gems": {
+        "teamA": 22,
+        "teamB": 1024
+      },
+      "crashes": 0,
+      "deaths": 29,
+      "our": {
+        "collectedGems": 264,
+        "submittedGems": 22,
+        "gems": 0,
+        "deaths": 29,
+        "kills": 0,
+        "lostGems": 242,
+        "conversion": 0.08333333333333333
+      },
+      "enemy": {
+        "collectedGems": 1316,
+        "submittedGems": 1024,
+        "gems": 292,
+        "deaths": 0,
+        "kills": 29,
+        "lostGems": 0,
+        "conversion": 0.7781155015197568
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    },
+    {
+      "map": "eight",
+      "side": "B",
+      "win": false,
+      "valid": true,
+      "exit_code": 0,
+      "outcome": "teamA",
+      "rounds": 642,
+      "seed": "7339465376952007826",
+      "gems": {
+        "teamA": 1002,
+        "teamB": 0
+      },
+      "crashes": 0,
+      "deaths": 37,
+      "our": {
+        "collectedGems": 154,
+        "submittedGems": 0,
+        "gems": 0,
+        "deaths": 37,
+        "kills": 2,
+        "lostGems": 154,
+        "conversion": 0.0
+      },
+      "enemy": {
+        "collectedGems": 1112,
+        "submittedGems": 1002,
+        "gems": 66,
+        "deaths": 7,
+        "kills": 35,
+        "lostGems": 44,
+        "conversion": 0.9010791366906474
+      },
+      "caught_errors": [],
+      "fuel_suspensions": 0
+    }
+  ]
+}

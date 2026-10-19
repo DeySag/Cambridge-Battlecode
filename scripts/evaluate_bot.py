@@ -76,6 +76,19 @@ def main():
                 crashes=summary['diagnostics']['botFaults'][team],
                 deaths=sum(int(x['metrics']['deaths']) for x in summary['champions'] if x['team'] == team),
             )
+            for label, owner in [('our', team), ('enemy', other)]:
+                champions = [x['metrics'] for x in summary['champions'] if x['team'] == owner]
+                totals = {key: sum(int(c[key]) for c in champions)
+                          for key in ['collectedGems', 'submittedGems', 'gems', 'deaths', 'kills']}
+                totals['lostGems'] = sum(int(entry['value']) for event in summary['events']
+                                        if event['kind'] == 'gemLoss' and event['owner'].get('team') == owner
+                                        for entry in event['entries'])
+                totals['conversion'] = (totals['submittedGems'] / totals['collectedGems']
+                                        if totals['collectedGems'] else None)
+                result[label] = totals
+                if totals['collectedGems'] != totals['submittedGems'] + totals['gems'] + totals['lostGems']:
+                    result['error'] = f'{label} gem accounting does not reconcile'
+                    return result
             replay = re.search(r'replay bundle: (.+)', completed.stdout)
             if not replay:
                 result['error'] = 'completed run has no replay bundle'
