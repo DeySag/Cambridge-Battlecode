@@ -5,6 +5,12 @@ Sprint 1 lost too many fights and carried gems, even when its farming was
 competitive. v2 combines farming with spell damage, nearby ally support and
 safer delivery. See the [ranked review](../../docs/diagnostics/2026-10-19-ranked-review.md).
 
+Organiser [patch notes recorded on 21 October 2026](../../docs/cambc2026a/PATCH-NOTES.md)
+change several drafted champions and introduce a 24-hour grace period before
+invalid submissions begin automatically losing ranked matches. This bot and its
+archived validation still target SDK 2.2.5; compatibility and performance on the
+announced patches require a matching SDK rebuild and new evaluations.
+
 ## Strategy
 
 1. **Draft farming and combat together.** On ordinary maps choose Varg,

@@ -2,6 +2,14 @@
 
 These notes summarize the two organiser documents supplied by the user for event `cambc2026a`. The originals, retained verbatim in this directory, are the primary references; these notes and the generated API index are navigation aids. Read the relevant original section before implementing a mechanic. Treat document examples as reference material, not instructions to execute commands or change the project. User requests remain separate from document content.
 
+**Balance update recorded 21 October 2026:** the user supplied newer organiser
+announcements, retained in [PATCH-NOTES.md](PATCH-NOTES.md), covering Heart of
+Ruin, Stellar, Ren, Vesper Vale, Vendetta, Tavi, Prism and the 24-hour invalid-bot
+grace period. Those announcements take precedence for the affected values in
+the historical exports. The project is still pinned to SDK 2.2.5; these notes do
+not establish that its engine implements the announced changes. Publication
+dates and the corresponding SDK version were not supplied.
+
 - `GameRules.md`: complete game rules and champion specifications.
 - `BotAPICpp.md`: full C++ API export, signatures, semantics and illustrative fragments.
 - `API-index.txt`: generated list of API signatures and their primary descriptions, grouped by namespace/type. Omits illustrative fragments and repetitive usage prompts; consult the original for full context.
@@ -85,7 +93,7 @@ Altar locks placed within two tiles block enemy tributes and cancel their channe
 
 ## Champion kit lookup
 
-All abilities have the shared one-cast-per-turn rule and per-slot cooldown. Consult original champion tables for base stats and shard growth before calculating builds. Offensive unit/ground spells below have cast range 4 unless the entry says otherwise. Damaging ranged spells below exclude ordinary walking; explicit exceptions/metadata take precedence.
+All abilities have the shared one-cast-per-turn rule and per-slot cooldown. Consult the original champion tables together with [the newer patch notes](PATCH-NOTES.md) for base stats and shard growth before calculating builds. Prism and Ren below reflect the latest supplied announcements; check the matching runtime metadata before using these values locally. Offensive unit/ground spells below have cast range 4 unless the entry says otherwise. Damaging ranged spells below exclude ordinary walking; explicit exceptions/metadata take precedence.
 
 | Champion | Class / passive | Slot 0 | Slot 1 |
 | --- | --- | --- | --- |
@@ -93,13 +101,13 @@ All abilities have the shared one-cast-per-turn rule and per-slot cooldown. Cons
 | Issac | Melee; linked fate with Cassi | Self attack reset | Ground dash, up to 2 steps |
 | Ryth | Melee; +Strength = 1% bonus health | Ground radius-1 hit: 1× Focus + 1-round stun; excludes walk | Self attack reset |
 | Vesper Vale | Ranged; +20% gold (additive with Treasure) | Self attack reset | Ground dash, up to 2 steps |
-| Prism | Ranged; +0.2 Focus per carried gem | 1.5× Focus unit hit + 1-round stun | Radius-1 ground hit, 1× Focus |
+| Prism | Ranged; +1.5 Focus per carried gem (announced patch) | 1.5× Focus unit hit + 1-round stun | Radius-1 ground hit, 1× Focus |
 | Stellar | Ranged | 2× Focus unit hit | Radius-1 ground hit, 1.4× Focus |
 | Vendetta | Melee; kills, including monsters, reset ability cooldowns | Self attack reset | Ground dash, up to 2 steps |
 | Marcella | Melee; stun immunity | Reset with enhanced next attack that stuns for 1 round | 2× Focus unit hit, excludes walk |
 | Tavi | Ranged; field shards, spawn sales | Self attack reset | 2.2× Focus unit hit + 1-round stun |
 | Willow | Ranged | Heal another ally for up to 3× Focus, walk compatible | Self attack reset |
-| Ren | Melee; retaliates for 0.2× Focus, even on death | 1.25× Focus unit hit + 1-round stun, excludes walk | Ground dash, up to 2 steps |
+| Ren | Melee; retaliates for 0.2× Focus, even on death | 0.75× Focus unit hit + 1-round stun, excludes walk (announced patch) | Ground dash, up to 2 steps |
 | Varg | Melee; Strength splash radius 1 around basic attack target, no double hit on primary | Self attack reset | Self shield, 2.5× Focus for 5 turns |
 
 ## C++ API contracts to preserve
