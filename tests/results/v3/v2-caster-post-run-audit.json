@@ -1,0 +1,687 @@
+{
+  "note": "Original reference report predates automatic enemy log checks. This separate post-run audit checks the original completed native statistics and opponent stdout; original report is preserved.",
+  "games": 68,
+  "all_enemy_checks_passed": true,
+  "results": [
+    {
+      "map": "00ambush",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "81ac8b6689f275d24e57d586f2451a160484c15144f86afd0c4450e02c39e579",
+      "statistics_sha256": "4dbda3259a7e05e04fdb57916398ce050f357590b4fde3bb2d192c23ca474f98"
+    },
+    {
+      "map": "00ambush",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "81ac8b6689f275d24e57d586f2451a160484c15144f86afd0c4450e02c39e579",
+      "statistics_sha256": "86cb2f680607bce300344ec5f50743fbb7a4e236ad9d1aa6ae9c3922dc68c87d"
+    },
+    {
+      "map": "00contest",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "554240a5a793f8c1ac9c518cb6edbacab0129ec4dfd94b199331aaebd0bf418a",
+      "statistics_sha256": "7a659c6cd21fb4b74dfebcf8a63b21e7835955685289dc503d0ab6c9a18f6af6"
+    },
+    {
+      "map": "00contest",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "554240a5a793f8c1ac9c518cb6edbacab0129ec4dfd94b199331aaebd0bf418a",
+      "statistics_sha256": "f2500f16ce85a7622d664847a6649cdcb98e633946cb43c0e1cd517625484e62"
+    },
+    {
+      "map": "00elkring",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "4621e92590befe6b0438b7ecdd8fde5aa85945b27535f4968e701cf86934746e",
+      "statistics_sha256": "1c99547acfaf01fde17775fceb1690764317a61765af6f6bddd558c1603b01df"
+    },
+    {
+      "map": "00elkring",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "4621e92590befe6b0438b7ecdd8fde5aa85945b27535f4968e701cf86934746e",
+      "statistics_sha256": "c26038724d6f656293166adeca0d28caced2ba52ec47460ccc7b70a8ae010477"
+    },
+    {
+      "map": "00lanes",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "8ca26ed2ea65c7d80ceb9604a7431ca1dc056922912b4e2f46cad06051e4886a",
+      "statistics_sha256": "7b6119c0ccad336bbc4aa6e69d5ab09e3685f637daec444547fbe0b78acc6d74"
+    },
+    {
+      "map": "00lanes",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "8ca26ed2ea65c7d80ceb9604a7431ca1dc056922912b4e2f46cad06051e4886a",
+      "statistics_sha256": "643b0f4ef37f715c5c2622c654d7b03860dd826fbcbcd51cbd92be7226e77b5f"
+    },
+    {
+      "map": "00pilgrimage",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "7d7ddb9c37c77cd8b3721423e155400d936eaa76fa3c62fe24b308d0fd5eb673",
+      "statistics_sha256": "1718760e1969e2917d924860df09a6b31f2938e28c8f223d2b65834f4e6f2fe0"
+    },
+    {
+      "map": "00pilgrimage",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "7d7ddb9c37c77cd8b3721423e155400d936eaa76fa3c62fe24b308d0fd5eb673",
+      "statistics_sha256": "41e1adeac0e6e4980329b5582ceb4984d172a51e3fecddc93869eafb42e62cc0"
+    },
+    {
+      "map": "00reverse_spiral",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f57669ffc98b76a5c2e4eccba41690dc193efc29f067ee960605617b2cfb48e5",
+      "statistics_sha256": "769c42d3219cf751283d2afad09ba7a48439feacb8ea7abb76b67c69d1f2a40f"
+    },
+    {
+      "map": "00reverse_spiral",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f57669ffc98b76a5c2e4eccba41690dc193efc29f067ee960605617b2cfb48e5",
+      "statistics_sha256": "c340549d88d034a2f7bfb1d69db07144e1eddf616618efd9b27344a4c4829943"
+    },
+    {
+      "map": "00rows",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "6a4203ae1bfe86ad0f6b083f390cfd8e2f5e45f7e4102f6a2f27205d5333e701",
+      "statistics_sha256": "bae3204ad397acdbed45f8d8411e179a90b8cc93772ef932f895f8ba91512944"
+    },
+    {
+      "map": "00rows",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "6a4203ae1bfe86ad0f6b083f390cfd8e2f5e45f7e4102f6a2f27205d5333e701",
+      "statistics_sha256": "f4d6693269d929fca5ae0d48fa4029abccc7a55b35abe8b2bde032651dba5fae"
+    },
+    {
+      "map": "00swirl",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "e6f860670947b1326f34c86515db8ef6893c565eaa69e3f9a6464ec5744e1c93",
+      "statistics_sha256": "a58e7dde308848e9faddd98816671d3a56c69ca8011f40b033ede995cb511a8e"
+    },
+    {
+      "map": "00swirl",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "e6f860670947b1326f34c86515db8ef6893c565eaa69e3f9a6464ec5744e1c93",
+      "statistics_sha256": "1fd229511f1bf1e258ca63a98fb1b38c1342ed44aaf17fdc834873dabba15183"
+    },
+    {
+      "map": "01boss_battle",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "53086e249294aed6f427fe647d578303589a081e953c62a0ff8f20cade9993fa",
+      "statistics_sha256": "4c69f4820b95040454e53a963df58128a65ba9a6912931c029c5fe90d1515c59"
+    },
+    {
+      "map": "01boss_battle",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "53086e249294aed6f427fe647d578303589a081e953c62a0ff8f20cade9993fa",
+      "statistics_sha256": "b3db48e09bb023f41b4300c248bb774ee99b721f3659716ce27cd867a9d6c1a1"
+    },
+    {
+      "map": "01broken_curve",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "1763423b171f3b61128b2a913a10f46ba550e7a2e79ae27dd89e915c952b5117",
+      "statistics_sha256": "d22193099d63395f429765244c85c46b66afccd1f87efa6ef3428dd910e8da3f"
+    },
+    {
+      "map": "01broken_curve",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "1763423b171f3b61128b2a913a10f46ba550e7a2e79ae27dd89e915c952b5117",
+      "statistics_sha256": "f305aa33a508f341e2cc49cd2d0517bd7c70fdcb7319e4792c0a4f0e7f30ff39"
+    },
+    {
+      "map": "01concentrated_wealth",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "dc09c386d5e9dec3cec8bc4575c19d43233e08790e138ccd02be4644f2808c65",
+      "statistics_sha256": "7dc255e3a58df9b92a4ada5d17d95f710ae395489a064cffe5204cb5ddfd91cc"
+    },
+    {
+      "map": "01concentrated_wealth",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "dc09c386d5e9dec3cec8bc4575c19d43233e08790e138ccd02be4644f2808c65",
+      "statistics_sha256": "ad5c76097b652ee539cda75b2e0511fcbc1c81810dcdcf1a500e3d1f600e9eb3"
+    },
+    {
+      "map": "01fracture",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f82a1b99a7a70f8ab21f275dc8e22fbad6a71030f09fdd224d61977fe55dd914",
+      "statistics_sha256": "97bc5543ca2afb2d981e2f0c9460b08dbff3555587dc07e4b966b919cf1a7638"
+    },
+    {
+      "map": "01fracture",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f82a1b99a7a70f8ab21f275dc8e22fbad6a71030f09fdd224d61977fe55dd914",
+      "statistics_sha256": "9ebc104f99ad07d66e64da6cc3a436bb0114e0a745c7ce3632bd7ea7bff71b08"
+    },
+    {
+      "map": "01hooks",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "23e58fe8f41ff66761ade251d3d10a9c3eead864f9ad74f12ad9e34f4bece378",
+      "statistics_sha256": "4763858793437b7cf32d45d4fe007d2eb2881325f28fd8e912da6b8ccdc02caa"
+    },
+    {
+      "map": "01hooks",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "23e58fe8f41ff66761ade251d3d10a9c3eead864f9ad74f12ad9e34f4bece378",
+      "statistics_sha256": "a78862a47e4f155498805e5adc9ca9fc51fd8100e803edce364a5359773d7a12"
+    },
+    {
+      "map": "01islands",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "d97cf04b738393812fb51024582e2a6cfba8a850b19ce031f2c1ad3d7b916acb",
+      "statistics_sha256": "73009e337b0e62fb193b075019c04859f33323b8cee1bfbec3628751c817f965"
+    },
+    {
+      "map": "01islands",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "d97cf04b738393812fb51024582e2a6cfba8a850b19ce031f2c1ad3d7b916acb",
+      "statistics_sha256": "6740bab1b8ac596cd1d334489385c2041fd68424e49d52ea2549f4a813525b30"
+    },
+    {
+      "map": "01shortcut",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f77db387292e66a8aad7e912c179787db0c41b6632ee841a21593dfc279ecb3a",
+      "statistics_sha256": "a03c58d552d4eaf6c2c764683287eaf90fea3d29f7d9b8657ea38b81a073324c"
+    },
+    {
+      "map": "01shortcut",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "f77db387292e66a8aad7e912c179787db0c41b6632ee841a21593dfc279ecb3a",
+      "statistics_sha256": "8c82cd25f1a54952d81137f6ab9bfbae2ecec895dffd3a3ae8df90c9a39b49df"
+    },
+    {
+      "map": "01the_farm",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "5cca9ed6eaaf6ef15a170a4ea78488237fda7b256e182a2e3360a14b485e09c3",
+      "statistics_sha256": "48c73136ca12e7906dca679ad7fcd7c20686bc199b06a627a2cbe04498103515"
+    },
+    {
+      "map": "01the_farm",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "5cca9ed6eaaf6ef15a170a4ea78488237fda7b256e182a2e3360a14b485e09c3",
+      "statistics_sha256": "764d4fc003853c44c6a205113b3a3a82c1f16da10151e353fc918ed8de8977eb"
+    },
+    {
+      "map": "01yellow_brick_road",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "130453395278cdabb1ff80564357a99ca8394afaef006fdede8beb88924a8fa0",
+      "statistics_sha256": "c130a6ef7c8344cd49608267f996b86831bd8bc72ff4782e068f0aefc855e7dd"
+    },
+    {
+      "map": "01yellow_brick_road",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "130453395278cdabb1ff80564357a99ca8394afaef006fdede8beb88924a8fa0",
+      "statistics_sha256": "147ed5b5020cbb9942d6d335cd7d0347beed7c57bd469065a7e81e08b7575750"
+    },
+    {
+      "map": "ambush",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "cd0e19ffcbaaea59137c3e2af47939ba920b80f86856948015b02fb70664fa3f",
+      "statistics_sha256": "9b53173aaff7fba2818d305fd1e1470fed8a1243ac5f957b37e2ceed26ec2f06"
+    },
+    {
+      "map": "ambush",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "cd0e19ffcbaaea59137c3e2af47939ba920b80f86856948015b02fb70664fa3f",
+      "statistics_sha256": "f7865660b4161b3f79c68511c655e38946bb14caf3032660dcfa6148c3f75611"
+    },
+    {
+      "map": "collision",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "ebfcace19ebb3bca84d63856c5cb56285042057d751ff41dc011d8a2c8c085dc",
+      "statistics_sha256": "2989148dd889d54727a0ffd487b5606bea17b1326c111ae119e8ad2165776185"
+    },
+    {
+      "map": "collision",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "ebfcace19ebb3bca84d63856c5cb56285042057d751ff41dc011d8a2c8c085dc",
+      "statistics_sha256": "ae3276355cee85a038896ea97f4f0348365f9ea7d96a6478eab19ba5346a2693"
+    },
+    {
+      "map": "contest",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c76debb1c6fde9bad53996f02dda7820b79b9729c7a4592a71a82b0518820f7f",
+      "statistics_sha256": "de62190b928cba2e3e8f49b0b705fe70cf79908aa5c4cfe4f6fa100fad6ceb4c"
+    },
+    {
+      "map": "contest",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c76debb1c6fde9bad53996f02dda7820b79b9729c7a4592a71a82b0518820f7f",
+      "statistics_sha256": "669a30504557ca4e7cb37387b8faab8b3b0d64312faed9a48bb6167a437e0a30"
+    },
+    {
+      "map": "corners",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "ee68ccad568ca8ff6d87a77f2cbc9cf6ee54dc63c74fb306e5ac67d8c0556cc6",
+      "statistics_sha256": "7e5292589432ba588f5c84486a3e8ea5e5310968274c40ccc9b556e5f4cc3ec8"
+    },
+    {
+      "map": "corners",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "ee68ccad568ca8ff6d87a77f2cbc9cf6ee54dc63c74fb306e5ac67d8c0556cc6",
+      "statistics_sha256": "058e6ef9a482a2bd974338094f46f6e5d33bfcba97e0ed52ffa3547b6a764a9e"
+    },
+    {
+      "map": "eight",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "61fa921a44a474425cf8de649705fcd168e0784b3610840e1b4c43513a7c403b",
+      "statistics_sha256": "822d653d2338618c9bdecf71597c6662b7a9910f9a9fb99b613d73a0e8831ad9"
+    },
+    {
+      "map": "eight",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "61fa921a44a474425cf8de649705fcd168e0784b3610840e1b4c43513a7c403b",
+      "statistics_sha256": "a3e1f7ebd12552ad7b2416071304493f5e50e32c150201b6fa51315a42f91b2f"
+    },
+    {
+      "map": "elkring",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "37b8ace8d2ae29b8d7dcedc7ce5107e9ef3c5d8868fb8d42e2e1293cdc04939e",
+      "statistics_sha256": "e1273b2f949bf99a544e07d2b818064a1388a63a8f20351740a129558c712d36"
+    },
+    {
+      "map": "elkring",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "37b8ace8d2ae29b8d7dcedc7ce5107e9ef3c5d8868fb8d42e2e1293cdc04939e",
+      "statistics_sha256": "eb2bcdf214fe0c9693dc20792aeb20aa53470da8324f695911e971e39b51723d"
+    },
+    {
+      "map": "expanse",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "95a4e64280dfd13f8d00b58b2ea651335c1203a08df1ef6d53ded8ab990cdb90",
+      "statistics_sha256": "61f0410d0f1d9ac71ab8194de9e2559ccd3bc159f14be2fff388e8e9f592c982"
+    },
+    {
+      "map": "expanse",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "95a4e64280dfd13f8d00b58b2ea651335c1203a08df1ef6d53ded8ab990cdb90",
+      "statistics_sha256": "33c6f7e6dc18ed0bbd35f2dd10da063470df141feb6ece978ad2d13ff075f782"
+    },
+    {
+      "map": "fragment",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "9696d12821252abe17668f012ad17d66eaaf6708b5abf39230463ae1eaaf603e",
+      "statistics_sha256": "efcb735e45551cfee9c2694f40447356e8352e4a4430f631156bca54389b6ae6"
+    },
+    {
+      "map": "fragment",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "9696d12821252abe17668f012ad17d66eaaf6708b5abf39230463ae1eaaf603e",
+      "statistics_sha256": "d6d8b2f90878e249f003f0c026d79503f4215b6e352f51d96d8bd94d1bf613f3"
+    },
+    {
+      "map": "interlock",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c7ac699781ace7557a98f736bf57a719a7f0aa7c816b462419d193d2e6e5b5f4",
+      "statistics_sha256": "580c9c3177c68cc072af77dbdb2b22a604ed5a69043d9370700cc9f5d1d8802a"
+    },
+    {
+      "map": "interlock",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c7ac699781ace7557a98f736bf57a719a7f0aa7c816b462419d193d2e6e5b5f4",
+      "statistics_sha256": "a26b719e850e3b831cb355270f7ae89f1c1d7c343e036a3f9c34897bb1af0cd5"
+    },
+    {
+      "map": "lanes",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "bf50fd858a0f4d89a86b90228e77df6ee16bcaf05c627ba4d79460eab904f184",
+      "statistics_sha256": "a56b44667b8b5f336cd54d1a34b44925eeedd4defdc8680188c3ee7c9ed9ced1"
+    },
+    {
+      "map": "lanes",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "bf50fd858a0f4d89a86b90228e77df6ee16bcaf05c627ba4d79460eab904f184",
+      "statistics_sha256": "af00451f0e9c2a906235242e6d277525fba3a0e30d4be071159884b8d4b3d3d3"
+    },
+    {
+      "map": "monolith",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "61bcbc25b93c80091ab59ebfd8a087847880f54cb0dfaa2c39e2fe0ef3cedb2e",
+      "statistics_sha256": "20dcbfc8097351b5d39a101b7c41d5b58844c24b8485ef5249cfa2256c3e2f17"
+    },
+    {
+      "map": "monolith",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "61bcbc25b93c80091ab59ebfd8a087847880f54cb0dfaa2c39e2fe0ef3cedb2e",
+      "statistics_sha256": "1faceb5a0fa175ad1d49a2ef5f16f12617bf04701bf37b3fafb5093d4adbd9d3"
+    },
+    {
+      "map": "packs",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "116b2c569baf13bb06a75699c809e239fbb14202a03dc8d8d15a2146be6e2416",
+      "statistics_sha256": "048b82e7144275216e2a51a46746f18dfbfc23928b2faf8f7fca7458f32fed4b"
+    },
+    {
+      "map": "packs",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "116b2c569baf13bb06a75699c809e239fbb14202a03dc8d8d15a2146be6e2416",
+      "statistics_sha256": "3599567e10397fc059e3021b9072b81cb4dab5223d5ecb3ec953d0af14144300"
+    },
+    {
+      "map": "pilgrimage",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "13843d1e38afd731a5e8a0ef0c05a5af08a00101e24475dfda56bb07d8a33e81",
+      "statistics_sha256": "7c1cdfc6d6f9d3e41109c9fc06115ce1a01c0f5835ebfab6d0f19f1f3bb77035"
+    },
+    {
+      "map": "pilgrimage",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "13843d1e38afd731a5e8a0ef0c05a5af08a00101e24475dfda56bb07d8a33e81",
+      "statistics_sha256": "cf6bbb7bb4b020cdbb78203343575e7aaa4dc1b2601557ce50752b23fcb72c34"
+    },
+    {
+      "map": "rows",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "50365c961d1f85234220239211a5b526e70522f30c145160a46c0ea6e1cf757a",
+      "statistics_sha256": "f781feeac705feb1ac69afadeb4e621b81e5ad5b3d1300144ed04d4854f6dc2c"
+    },
+    {
+      "map": "rows",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "50365c961d1f85234220239211a5b526e70522f30c145160a46c0ea6e1cf757a",
+      "statistics_sha256": "15134c00fb48467640de2374fd8b0e38f02b527af8132548c886c00ac05089d3"
+    },
+    {
+      "map": "rushbait-v2",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c84673dd8ca2d199f2c5c0f2c6e3d39909d7429fb1da09b9a1c66a7d635a1733",
+      "statistics_sha256": "9d4b5ac1db64bdac279718149f44e8d281380eacb2c8e6de6ee0c00c31830c02"
+    },
+    {
+      "map": "rushbait-v2",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "c84673dd8ca2d199f2c5c0f2c6e3d39909d7429fb1da09b9a1c66a7d635a1733",
+      "statistics_sha256": "69ff342c926e0790344a668fd3a21b5e026a596e0f2047203a30b2b802b5c7ce"
+    },
+    {
+      "map": "stampede",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "43362dd0d8b404f291d4e5ea701ba782269ab74debbd2a976ad6d0d05e2f10e3",
+      "statistics_sha256": "7829f64862d5f2fa0718cc55d5d0d3a45e06d69a45f6aa1de287f7edfe4c2216"
+    },
+    {
+      "map": "stampede",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "43362dd0d8b404f291d4e5ea701ba782269ab74debbd2a976ad6d0d05e2f10e3",
+      "statistics_sha256": "20cb5bb72624c0776282bd60361533ff2532be9e6e989e92bfca769e185e4832"
+    },
+    {
+      "map": "swirl",
+      "side": "A",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "988f7804a0f3e3fa4394ff66cac222dc957886d15ba9fcec9f3023a0ecb09360",
+      "statistics_sha256": "8c821b281ecf174e06ee18cc86c014b12cb1fcf381cca33d02940721a8b5c398"
+    },
+    {
+      "map": "swirl",
+      "side": "B",
+      "enemy_crashes": 0,
+      "enemy_caught_errors": [],
+      "engine_version": "1.0.2",
+      "engine_build_hash": "ff41468c05c7be716f7647aaf7ea7314633f7038815386c806fafcec98629114",
+      "map_hash": "988f7804a0f3e3fa4394ff66cac222dc957886d15ba9fcec9f3023a0ecb09360",
+      "statistics_sha256": "3f5df911cc43d6e2e568cb55c9fc13ddc65ce67b77d0a204e448fd68c6c93513"
+    }
+  ]
+}

@@ -70,7 +70,7 @@ Strength champions are struggling to endure the amount of burst in the game, so 
 
 Prism has not seen any usage in higher ranked play, hopefully these changes will encourage teams to build a specialist strategy around them
 
-## Reference and SDK compatibility
+## Reference and SDK compatibility at initial recording (SDK 2.2.5)
 
 - **Heart of Ruin:** the supplied Strength growth changes form the sequence
   **5 → 4 → 3.5**. The latest supplied values are base Strength **30**,
@@ -102,3 +102,13 @@ API compatibility, rebuild in release mode and rerun the match evaluations.
 For patch-induced compilation failures, the announced ladder policy allows
 **24 hours** to repair an invalid submission before automatic ranked losses;
 the competition site alerts affected teams.
+
+
+### Subsequent SDK migration — 21 October 2026
+
+The user subsequently requested compatibility with the updated SDK. The project
+now pins **3.0.4**, with organiser engine **1.0.2**, and vendors its official SDK.
+The compatibility caveats immediately above describe the earlier documentation
+commit, not the current project. Current runtime checks and the monolith range
+change are recorded in [READING-NOTES.md](READING-NOTES.md#sdk-304-follow-up--21-october-2026).
+The original announcements and preserved v1/v2 source bundles remain unchanged.

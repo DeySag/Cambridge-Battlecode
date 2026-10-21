@@ -1,76 +1,160 @@
 {
-  "version": "v2 Sprint 2",
-  "sdk_version": "2.2.5",
-  "sdk_commit": "42d945e",
-  "engine_version": "0.0.3",
+  "version": "v3 patched SDK bot",
+  "date": "2026-10-21",
+  "sdk_version": "3.0.4",
+  "engine_version": "1.0.2",
   "mode": "release",
-  "maps": 17,
+  "maps": 34,
+  "map_file_sha256": {
+    "00ambush": "81ac8b6689f275d24e57d586f2451a160484c15144f86afd0c4450e02c39e579",
+    "00contest": "554240a5a793f8c1ac9c518cb6edbacab0129ec4dfd94b199331aaebd0bf418a",
+    "00elkring": "4621e92590befe6b0438b7ecdd8fde5aa85945b27535f4968e701cf86934746e",
+    "00lanes": "8ca26ed2ea65c7d80ceb9604a7431ca1dc056922912b4e2f46cad06051e4886a",
+    "00pilgrimage": "7d7ddb9c37c77cd8b3721423e155400d936eaa76fa3c62fe24b308d0fd5eb673",
+    "00reverse_spiral": "f57669ffc98b76a5c2e4eccba41690dc193efc29f067ee960605617b2cfb48e5",
+    "00rows": "6a4203ae1bfe86ad0f6b083f390cfd8e2f5e45f7e4102f6a2f27205d5333e701",
+    "00swirl": "e6f860670947b1326f34c86515db8ef6893c565eaa69e3f9a6464ec5744e1c93",
+    "01boss_battle": "53086e249294aed6f427fe647d578303589a081e953c62a0ff8f20cade9993fa",
+    "01broken_curve": "1763423b171f3b61128b2a913a10f46ba550e7a2e79ae27dd89e915c952b5117",
+    "01concentrated_wealth": "dc09c386d5e9dec3cec8bc4575c19d43233e08790e138ccd02be4644f2808c65",
+    "01fracture": "f82a1b99a7a70f8ab21f275dc8e22fbad6a71030f09fdd224d61977fe55dd914",
+    "01hooks": "23e58fe8f41ff66761ade251d3d10a9c3eead864f9ad74f12ad9e34f4bece378",
+    "01islands": "d97cf04b738393812fb51024582e2a6cfba8a850b19ce031f2c1ad3d7b916acb",
+    "01shortcut": "f77db387292e66a8aad7e912c179787db0c41b6632ee841a21593dfc279ecb3a",
+    "01the_farm": "5cca9ed6eaaf6ef15a170a4ea78488237fda7b256e182a2e3360a14b485e09c3",
+    "01yellow_brick_road": "130453395278cdabb1ff80564357a99ca8394afaef006fdede8beb88924a8fa0",
+    "ambush": "cd0e19ffcbaaea59137c3e2af47939ba920b80f86856948015b02fb70664fa3f",
+    "collision": "ebfcace19ebb3bca84d63856c5cb56285042057d751ff41dc011d8a2c8c085dc",
+    "contest": "c76debb1c6fde9bad53996f02dda7820b79b9729c7a4592a71a82b0518820f7f",
+    "corners": "ee68ccad568ca8ff6d87a77f2cbc9cf6ee54dc63c74fb306e5ac67d8c0556cc6",
+    "eight": "61fa921a44a474425cf8de649705fcd168e0784b3610840e1b4c43513a7c403b",
+    "elkring": "37b8ace8d2ae29b8d7dcedc7ce5107e9ef3c5d8868fb8d42e2e1293cdc04939e",
+    "expanse": "95a4e64280dfd13f8d00b58b2ea651335c1203a08df1ef6d53ded8ab990cdb90",
+    "fragment": "9696d12821252abe17668f012ad17d66eaaf6708b5abf39230463ae1eaaf603e",
+    "interlock": "c7ac699781ace7557a98f736bf57a719a7f0aa7c816b462419d193d2e6e5b5f4",
+    "lanes": "bf50fd858a0f4d89a86b90228e77df6ee16bcaf05c627ba4d79460eab904f184",
+    "monolith": "61bcbc25b93c80091ab59ebfd8a087847880f54cb0dfaa2c39e2fe0ef3cedb2e",
+    "packs": "116b2c569baf13bb06a75699c809e239fbb14202a03dc8d8d15a2146be6e2416",
+    "pilgrimage": "13843d1e38afd731a5e8a0ef0c05a5af08a00101e24475dfda56bb07d8a33e81",
+    "rows": "50365c961d1f85234220239211a5b526e70522f30c145160a46c0ea6e1cf757a",
+    "rushbait-v2": "c84673dd8ca2d199f2c5c0f2c6e3d39909d7429fb1da09b9a1c66a7d635a1733",
+    "stampede": "43362dd0d8b404f291d4e5ea701ba782269ab74debbd2a976ad6d0d05e2f10e3",
+    "swirl": "988f7804a0f3e3fa4394ff66cac222dc957886d15ba9fcec9f3023a0ecb09360"
+  },
   "source_sha256": {
-    "src/bot.cpp": "b4e00c86a9f74fdb3f8d836b947ba234d10c1b7523ff69da3b1057d87a67f3f0",
-    "src/bot.h": "9d28f32ad9a118c9540bd8fa1742f1e0fda23e8bd314553f5caa560cbc30fc37",
-    "src/draft.cpp": "c942801c82cce6b55f1ed4a4e23294740f347502f12e7318b2f088bc9cab0de7",
+    "src/bot.cpp": "eb25df86b106a5926e833f243ea27e44f73d03c88a3765bb36317cf39f9d1042",
+    "src/bot.h": "13377c907a74da22cdd74b2922e36a1ef3939453fe8f47b4cbe7ad973f8548f6",
+    "src/draft.cpp": "1cfe1b6587fe2723c9b6dd2b14309bca2b8ea8014db2505b7e625607aca7c894",
     "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
     "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
     "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
   },
+  "official_sdk_files": 64,
+  "official_sdk_manifest": "tests/results/v3/sdk-source-sha256.json",
+  "sdk_provenance": "Byte-for-byte match to all SDK files from the official CLI 3.0.4 project initialization; no missing or extra files.",
   "results": [
     {
-      "opponent": "Sprint 1",
-      "wins": 30,
-      "games": 34,
+      "opponent": "v2",
+      "wins": 55,
+      "games": 68,
+      "invalid": 0,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 29,
-      "report": "tests/results/v2/vs-sprint1.json"
+      "enemy_crashes": 0,
+      "enemy_caught_errors": 0,
+      "fuel_suspensions": 2364,
+      "gems": {
+        "collectedGems": 70359,
+        "submittedGems": 59684,
+        "lostGems": 7595,
+        "gems": 3080,
+        "deaths": 1112
+      },
+      "report": "tests/results/v3/vs-v2.json",
+      "report_sha256": "7c2c48fa084a54653b280938683c8093b3dae39b0f72b7b005d45a37b30b5534"
     },
     {
-      "opponent": "Caster pressure",
-      "wins": 26,
-      "games": 34,
+      "opponent": "pressure-caster",
+      "wins": 53,
+      "games": 68,
+      "invalid": 0,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 31,
-      "report": "tests/results/v2/vs-pressure-caster.json"
+      "enemy_crashes": 0,
+      "enemy_caught_errors": 0,
+      "fuel_suspensions": 2310,
+      "gems": {
+        "collectedGems": 75624,
+        "submittedGems": 61335,
+        "lostGems": 11481,
+        "gems": 2808,
+        "deaths": 1127
+      },
+      "report": "tests/results/v3/vs-pressure-caster.json",
+      "report_sha256": "dfa15c1684ea8963fd498d77090759d773eec5b61cc4aaa14fcf8613db543ed2"
     },
     {
-      "opponent": "Melee pressure",
-      "wins": 24,
-      "games": 34,
+      "opponent": "bruiser-pressure",
+      "wins": 38,
+      "games": 68,
+      "invalid": 0,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 26,
-      "report": "tests/results/v2/vs-pressure-melee.json"
+      "enemy_crashes": 0,
+      "enemy_caught_errors": 0,
+      "fuel_suspensions": 2589,
+      "gems": {
+        "collectedGems": 61161,
+        "submittedGems": 48068,
+        "lostGems": 11117,
+        "gems": 1976,
+        "deaths": 1726
+      },
+      "report": "tests/results/v3/vs-bruiser-pressure.json",
+      "report_sha256": "e87de3b3996ba325b49a82055f108e743d88ced73c7084abf358f1a5d3322d15"
     },
     {
-      "opponent": "ZIP round trip",
-      "wins": 4,
-      "games": 4,
+      "opponent": "bundle-verification",
+      "wins": 10,
+      "games": 12,
+      "invalid": 0,
       "crashes": 0,
       "caught_errors": 0,
-      "fuel_suspensions": 0,
-      "report": "tests/results/v2/bundle-verification.json"
+      "enemy_crashes": 0,
+      "enemy_caught_errors": 0,
+      "fuel_suspensions": 330,
+      "gems": {
+        "collectedGems": 13119,
+        "submittedGems": 10807,
+        "lostGems": 1802,
+        "gems": 510,
+        "deaths": 233
+      },
+      "report": "tests/results/v3/bundle-verification.json",
+      "report_sha256": "98a36dae6770a8803db682a4a522c7b0c7fc1243365d5958fcf35e66c5e1e05f"
     }
   ],
-  "final_candidate_games": 106,
-  "our_crashes": 0,
-  "our_caught_errors": 0,
-  "package": {
-    "path": "submissions/v2-sprint-2-bot-update.zip",
-    "bytes": 13043,
-    "sha256": "a25ec953026ac034463c65efe3895f3d5752d1f8ab618f4dad7453c5d3daa1a4",
-    "crc_verified": true,
-    "source_match_verified": true,
-    "extracted_rebuild_verified": true
+  "full_pool_games": 204,
+  "bundle_verification_games": 12,
+  "completed_games": 216,
+  "bundle": {
+    "path": "submissions/v3-patched-sdk-bot.zip",
+    "sha256": "f6ff205e76ac4de8ea3bc623661a395633de9abe6232a9c19662014d02d609de",
+    "contents": [
+      "src/bot.cpp",
+      "src/bot.h",
+      "src/draft.cpp",
+      "src/draft.h",
+      "src/main.cpp",
+      "src/random.h"
+    ],
+    "crc_and_source_hashes_verified": true,
+    "extracted_rebuilt_and_full_match_tested": true
   },
-  "reference_bundles": {
-    "submissions/v1-sprint-1-bot-update.zip": "0c00900c5abe1f59c0c95f2feb539ae90b26d4313be8fc1f2c159193ea75d47c",
-    "tests/opponents/pressure-caster.zip": "a30b7850e40de1db6811beed49c378e6bb4198081b7d555d97714d2ddc5ca278",
-    "tests/opponents/pressure-melee.zip": "409c9c0b668ce8b7cc64e6526198657c4745d02be7a7185c59ea458a93f66ad0"
-  },
-  "limitations": [
-    "Local fixed-map tests are not a tournament win-rate or Elo estimate.",
-    "Expanse and rows still lost both sides against Sprint 1.",
-    "Fuel suspensions remain and are counted separately from faults.",
-    "No authenticated competition upload was performed."
+  "limits": [
+    "Local deterministic fixture comparisons, not a ranked win-rate/Elo forecast.",
+    "Original 17 maps plus 17 checksum-verified replay maps; not the entire separately published 35-map pool.",
+    "Fuel suspensions remain frequent on large maps; no observed API errors or bot faults in this final set.",
+    "Reports retain both-sided losses; compact-map and bruiser matchups still have weaknesses."
   ]
 }

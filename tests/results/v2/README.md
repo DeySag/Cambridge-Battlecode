@@ -2,7 +2,7 @@
 
 The same frozen v2 source completed the full 17-map pool from both team
 positions against three opponents in release mode, using SDK/CLI 2.2.5.
-All source checksums match `bots/baseline/VALIDATION.json` and the submission ZIP.
+All source checksums match [`VALIDATION.json`](VALIDATION.json) and the submission ZIP.
 
 | Opponent | Wins | Games | Our crashes | Our caught API errors | Our fuel suspensions |
 | --- | ---: | ---: | ---: | ---: | ---: |

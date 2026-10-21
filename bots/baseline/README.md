@@ -1,85 +1,92 @@
-# v2 — farming with local combat support
+# v3 — durable economy and contested objectives
 
-C++ submission for organiser SDK 2.2.5. The first ranked replays showed that
-Sprint 1 lost too many fights and carried gems, even when its farming was
-competitive. v2 combines farming with spell damage, nearby ally support and
-safer delivery. See the [ranked review](../../docs/diagnostics/2026-10-19-ranked-review.md).
-
-Organiser [patch notes recorded on 21 October 2026](../../docs/cambc2026a/PATCH-NOTES.md)
-change several drafted champions and introduce a 24-hour grace period before
-invalid submissions begin automatically losing ranked matches. This bot and its
-archived validation still target SDK 2.2.5; compatibility and performance on the
-announced patches require a matching SDK rebuild and new evaluations.
+C++ bot for organiser **SDK/CLI 3.0.4, engine 1.0.2**. This replaces v2 after
+reviewing all 20 games in the four supplied losing series. See the
+[replay diagnosis](../../docs/diagnostics/2026-10-21-ranked-review.md) and
+[final measured results](../../tests/results/v3/README.md). The organiser's
+[patch announcements](../../docs/cambc2026a/PATCH-NOTES.md) and earlier v1/v2
+source ZIPs remain preserved.
 
 ## Strategy
 
-1. **Draft farming and combat together.** On ordinary maps choose Varg,
-   Stellar, Cassi/Issac, Ryth and Tavi in that order, up to the map's pick limit.
-   The linked pair provides two separately controlled units for one pick, with
-   the risk that both die if either dies. On boss-only gem maps retain the
-   Tavi, Stellar, Prism, Cassi/Issac, Ren draft.
-2. **Farm separate objectives.** Reserve camp groups with one byte per unit.
-   Rank rewards by walking, clearing, capture and delivery time, health risk,
-   visible enemies and recent deaths. Hold a safe capture until it completes.
-3. **Take useful nearby fights.** Compare visible friendly and enemy health,
-   damage and Focus before pursuing a visible opponent within seven tiles.
-   Prioritize vulnerable targets and gem carriers. Keep farming when no
-   productive engagement is available; do not attack enemies healing on spawn.
-4. **Use spells and defenses.** Estimate enemy bursts from basic attacks,
-   live ability ranges, damage, cooldowns and stuns. Shields, escape dashes and
-   defensive attacks help recover from danger. Ground spells can target
-   enemy champions as well as camps. This is a short heuristic, not a full
-   combat simulator or an assumption that allied vision is shared.
-5. **Deliver safely.** Prefer an altar using actual terrain path distance,
-   visible danger, locks and remembered death locations. Deposit convenient
-   bags, ordinarily bank at 100 gems, and bank smaller exposed bags when
-   health or nearby pressure makes that worthwhile. Reassess long channels;
-   damage alone does not interrupt tribute, so survivable channels can finish.
-   A failed route chosen to avoid danger never silently retries through it.
-6. **Upgrade for both jobs.** Buy Power Strength for basic attackers and
-   Power Focus for spellcasters, interleaving Power Health on ordinary maps.
-   Tavi buys in the field. Recall for healing or substantial unspent gold,
-   and stay on spawn through the healing turn. Buy and use altar locks.
-7. **Remember danger.** Each unit discounts camps near its recent death
-   locations for up to 180 rounds, with the penalty fading over time.
+- **Durable draft.** Ordinary maps open Varg then Tavi on dense camp layouts,
+  reversing those two on sparse layouts; add Heart of Ruin, Marcella and Vesper
+  as the pick limit permits. Boss-only gem maps choose Varg, Tavi, Willow,
+  Heart and Marcella. This avoids linked deaths and builds a shielded frontline
+  with ranged support. Monolith range is queried from the current engine;
+  range-four spells no longer give safe boss farming.
+- **Build an economy before expensive fights.** Complete five Jungle damage
+  shards, then five Durability Health, then five Monster damage; later complete
+  Power damage blocks interleaved with Bruiser Health. Heart buys Focus, basic
+  attackers buy Strength. Tavi shops in the field. Jungle and Durability passives
+  reduce incoming damage; their benefits are not assumed to stack repeatedly.
+  Recall for healing or a meaningful purchase rather than each small reward.
+- **Farm and move with a purpose.** Rank camps by rewards, terrain distance,
+  clearing time, health cost, delivery cost, claims and remembered deaths.
+  Reserve groups in one shared byte per body. Cache routes and spread expensive
+  objective scoring across turns. Static routes can approach a corridor monster;
+  a blocked step can switch to clearing its group. Temporary unit blockages
+  permit detours. Disconnected components require a demonstrated legal dash or
+  a range-three teleport crystal crossing; portal planning is nonrecursive.
+- **Bound capture waits.** Waiting on a cleared camp is productive only briefly.
+  An unseen enemy anywhere in a long connected group can prevent capture. After
+  the capture window plus a margin, sweep toward the far side and fight its
+  defender. A separate watchdog discards stale objectives and route plans after
+  16 rounds without movement, gem change or combat progress.
+- **Take profitable nearby fights.** Compare visible friendly and hostile
+  health and damage before short pursuits. Use damage, stuns, splash, shields,
+  attack resets, heals and damaging dash landings. Basic attacks can select a
+  reachable enemy when the preferred spell target is outside basic range, while
+  retaining the engagement policy's carrier and survival filters. Exclude enemy
+  spawn targets. Ranged units may reset their attack allowance after walking.
+- **Survive retaliation and burst.** Include neighbouring visible awake camps,
+  not just the selected group. Mark groups awakened by attacks and splash.
+  Use shields before retaliation, refresh health after attacks, and evaluate
+  escape tiles against camp damage, enemy abilities, stuns and cooldowns.
+  Stay on allied spawn for recovery while still using available attacks/spells.
+- **Turn gems into score.** Usually bank at 75, or at 30 near an altar; exposed
+  smaller bags, a winning bag and the time limit trigger earlier delivery.
+  Compare actual altar routes, visible danger, locks and recent death sites.
+  Remove hostile locks, use attack resets where useful, and finish survivable
+  tribute channels because ordinary damage does not interrupt them.
+- **Respect fuel and visibility.** Live state is read only for visible units.
+  Life, round identity, action allowance and fuel are checked before actions.
+  A resumed computation cannot silently assume it is still the same turn.
 
-Monolith farming still uses range-four spells outside the attack range of
-three reported by this SDK's runtime. It must be rechecked after balance/SDK
-changes. Issac farms ordinary resources on that map rather than attempting
-the monolith with his basic attacks.
+## Build and reproduce
 
-Pathfinding uses fresh occupancy, cached large-map routes and budget checks.
-Action boundaries recheck round identity and availability so a calculation
-resumed after a fuel suspension does not issue stale movement or casts.
-
-## Build and evaluate
+Install organiser CLI 3.0.4 and use the checked-in SDK:
 
 ```sh
 cambc build baseline --release
-python3 scripts/evaluate_bot.py --candidate baseline --opponent /path/to/sprint1
-python3 scripts/evaluate_bot.py --candidate baseline --opponent /path/to/pressure-caster
+mkdir -p bots/v2 bots/pressure-caster bots/bruiser-pressure
+unzip submissions/v2-sprint-2-bot-update.zip -d bots/v2
+unzip tests/opponents/pressure-caster.zip -d bots/pressure-caster
+unzip tests/opponents/v3/bruiser-pressure.zip -d bots/bruiser-pressure
+python3 scripts/evaluate_bot.py --candidate baseline --opponent v2 --output matches/new-v3-v2
+python3 scripts/evaluate_bot.py --candidate baseline --opponent pressure-caster --output matches/new-v3-caster
+python3 scripts/evaluate_bot.py --candidate baseline --opponent bruiser-pressure --output matches/new-v3-bruiser
 ```
 
-Use organiser SDK/CLI 2.2.5 and release mode, matching competition fuel rules.
-The evaluator runs each checked-in map from both sides, requires completed
-statistics, reconciles gem totals and checks our replay logs for API errors.
-Reports include score, collected/deposited/lost gems, deaths and fuel events.
+Each output directory must be new. By default the evaluator runs both positions
+on all **34 checked-in maps**: the original 17 plus 17 recovered from the uploaded
+replays and verified against official SHA-256 values. This covers every repo map,
+not the entire separately published 35-map pool. The evaluator rejects incomplete
+runs and API errors/crashes on either team, reconciles both gem accounts, and
+records source hashes, runtime/map hashes, seed, economy, deaths and fuel events.
 
-The original submission remains in
-[`submissions/v1-sprint-1-bot-update.zip`](../../submissions/v1-sprint-1-bot-update.zip).
-The two reproducible pressure opponents are documented under
-[`tests/opponents`](../../tests/opponents/README.md).
+## Validation and limits
 
-## Validation and submission
+[`VALIDATION.json`](VALIDATION.json) ties the final source hashes to benchmark
+reports and the source-only ZIP. Archived reports and CSVs live under
+[`tests/results/v3`](../../tests/results/v3/README.md); full local replays and
+statistics are under ignored `matches/v3-final-*`. ZIP extraction, rebuild and
+separate match checks verify the deliverable rather than only the working tree.
 
-`VALIDATION.json` records final source hashes, benchmark outcomes, fuel counts
-and the source ZIP checksum. Local full reports and replays are retained under
-ignored `matches/v2-final-*`. The archived benchmark summaries are under
-`tests/results/v2/`. These local opponents are regression tools, not a ranked
-win-rate or Elo prediction.
-
-The v2 source bundle is
-[`submissions/v2-sprint-2-bot-update.zip`](../../submissions/v2-sprint-2-bot-update.zip).
-It contains source files only. Its round-trip verification extracts the ZIP,
-rebuilds it as a separate bot and runs both sides on ordinary and boss maps.
-Build/test/package work does not establish a competition upload.
+These are deterministic local comparisons against independent hand-written
+fixtures. They do not predict ranked win rate or Elo. Enemy assessment is a
+short heuristic with partial vision, not a full combat search. Hidden defenders,
+multiple available enemy spells over several turns, failed transport, long
+contests and some close-range matchups remain risks. Fuel suspensions remain
+measured separately from bot faults. New arena replays should guide further
+changes; final validation reports document the losses as well as wins.

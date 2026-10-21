@@ -1,0 +1,110 @@
+{
+  "retrieved_on": "2026-10-21",
+  "manifest_source": "https://2026a.battlecode.co.uk/api/v1/maps/pool",
+  "note": "Map files recovered from the user-supplied replays and verified against the public pool SHA-256 values. Original 17 repository maps retained. This is not the entire 35-map published pool.",
+  "recovered_maps": [
+    {
+      "id": "1efbe907-7c38-4e98-9d3b-0df7d68d2861",
+      "name": "00ambush",
+      "sha256": "81ac8b6689f275d24e57d586f2451a160484c15144f86afd0c4450e02c39e579",
+      "size": 23272
+    },
+    {
+      "id": "52429aa6-cc70-44ba-8f32-a4536137621a",
+      "name": "00contest",
+      "sha256": "554240a5a793f8c1ac9c518cb6edbacab0129ec4dfd94b199331aaebd0bf418a",
+      "size": 806
+    },
+    {
+      "id": "d316c02a-d072-4b46-a275-0e3a17d5bdb2",
+      "name": "00elkring",
+      "sha256": "4621e92590befe6b0438b7ecdd8fde5aa85945b27535f4968e701cf86934746e",
+      "size": 524
+    },
+    {
+      "id": "62128fd1-03f3-4ce9-8e11-a953c91137a6",
+      "name": "00lanes",
+      "sha256": "8ca26ed2ea65c7d80ceb9604a7431ca1dc056922912b4e2f46cad06051e4886a",
+      "size": 807
+    },
+    {
+      "id": "b73bbfd9-40f7-4e4a-85a6-aaa022d9425c",
+      "name": "00pilgrimage",
+      "sha256": "7d7ddb9c37c77cd8b3721423e155400d936eaa76fa3c62fe24b308d0fd5eb673",
+      "size": 10274
+    },
+    {
+      "id": "513557cd-d72d-413f-898a-18a2f984514a",
+      "name": "00reverse_spiral",
+      "sha256": "f57669ffc98b76a5c2e4eccba41690dc193efc29f067ee960605617b2cfb48e5",
+      "size": 1556
+    },
+    {
+      "id": "24c4b196-106b-4d69-a9de-e893c24169dc",
+      "name": "00rows",
+      "sha256": "6a4203ae1bfe86ad0f6b083f390cfd8e2f5e45f7e4102f6a2f27205d5333e701",
+      "size": 5288
+    },
+    {
+      "id": "cc6898bd-c546-4759-8085-dc63d4c1e55b",
+      "name": "00swirl",
+      "sha256": "e6f860670947b1326f34c86515db8ef6893c565eaa69e3f9a6464ec5744e1c93",
+      "size": 1112
+    },
+    {
+      "id": "db1fd93e-b260-45c6-b0f0-ff4252d86f10",
+      "name": "01boss_battle",
+      "sha256": "53086e249294aed6f427fe647d578303589a081e953c62a0ff8f20cade9993fa",
+      "size": 591
+    },
+    {
+      "id": "e12790da-8423-41e5-b075-95bdd694ab55",
+      "name": "01broken_curve",
+      "sha256": "1763423b171f3b61128b2a913a10f46ba550e7a2e79ae27dd89e915c952b5117",
+      "size": 9973
+    },
+    {
+      "id": "ed601b24-40ea-43b7-8e87-8b92ec38554c",
+      "name": "01concentrated_wealth",
+      "sha256": "dc09c386d5e9dec3cec8bc4575c19d43233e08790e138ccd02be4644f2808c65",
+      "size": 10236
+    },
+    {
+      "id": "b31ca734-11a7-4256-b289-2a9302ec9cc2",
+      "name": "01fracture",
+      "sha256": "f82a1b99a7a70f8ab21f275dc8e22fbad6a71030f09fdd224d61977fe55dd914",
+      "size": 57292
+    },
+    {
+      "id": "a26d5e94-a071-4f08-bc01-50e47eff8efa",
+      "name": "01hooks",
+      "sha256": "23e58fe8f41ff66761ade251d3d10a9c3eead864f9ad74f12ad9e34f4bece378",
+      "size": 4165
+    },
+    {
+      "id": "57974243-c3b3-4f69-8f17-c60aeeea41a0",
+      "name": "01islands",
+      "sha256": "d97cf04b738393812fb51024582e2a6cfba8a850b19ce031f2c1ad3d7b916acb",
+      "size": 22234
+    },
+    {
+      "id": "dd70ddce-dd06-49cd-80cd-964b3ab76c5f",
+      "name": "01shortcut",
+      "sha256": "f77db387292e66a8aad7e912c179787db0c41b6632ee841a21593dfc279ecb3a",
+      "size": 4346
+    },
+    {
+      "id": "2ea6c59f-a555-49a5-832b-dba6e62e0caf",
+      "name": "01the_farm",
+      "sha256": "5cca9ed6eaaf6ef15a170a4ea78488237fda7b256e182a2e3360a14b485e09c3",
+      "size": 3244
+    },
+    {
+      "id": "60ee7758-570d-4599-a071-c1a8ad377925",
+      "name": "01yellow_brick_road",
+      "sha256": "130453395278cdabb1ff80564357a99ca8394afaef006fdede8beb88924a8fa0",
+      "size": 15319
+    }
+  ],
+  "legacy_maps_preserved": 17
+}

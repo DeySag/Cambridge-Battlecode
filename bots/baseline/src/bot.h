@@ -11,7 +11,8 @@ class Bot {
         std::vector<cambc::vec2> tiles;
         cambc::vec2 center{};
         float full_health = 0, health = 0, damage = 0;
-        int gems = 0, gold = 0, state = 0, ready_round = 0, seen_round = -1;
+        int gems = 0, gold = 0, state = 0, ready_round = 0, seen_round = -1, failed_until = -1;
+        int range = 0, capture_wait_from = -1;
         bool monolith = false;
     };
     struct Camp {
@@ -22,7 +23,7 @@ class Bot {
         bool awake;
     };
     struct Enemy {
-        struct Spell { float damage = 0; int range = 0, cooldown = 0; bool stun = false; };
+        struct Spell { float damage = 0; int range = 0, cooldown = 0; bool stun = false, dash = false; };
         cambc::champion view;
         cambc::vec2 position;
         float health, strength;
@@ -30,10 +31,17 @@ class Bot {
         std::array<Spell, 2> spells{};
         bool stunned = false;
     };
+    struct Ally {
+        cambc::champion view;
+        cambc::vec2 position;
+        float health, strength, focus;
+        int range;
+    };
     struct Danger { cambc::vec2 position; int expires; };
     std::vector<Group> groups;
     std::vector<Camp> camps;
     std::vector<Enemy> enemies;
+    std::vector<Ally> allies;
     std::vector<Danger> dangers;
     cambc::bitboard terrain;
     cambc::distance_field altar_distance, home_distance, route_field;
@@ -52,8 +60,15 @@ class Bot {
     cambc::vec2 position{};
     cambc::vec2 bank_altar{-1, -1};
     int bank_plan_round = -100, last_contact = -100;
+    int last_progress = 0, blocked_turns = 0, last_recall = -100, team_size = 0;
+    int last_gems = 0;
+    cambc::vec2 previous_position{-1, -1};
+    cambc::vec2 bridge_from{-1, -1}, bridge_to{-1, -1};
+    cambc::bitboard bridge_goals;
+    bool bridge_valid = false;
     cambc::champion_type type{};
-    float hp = 0, max_hp = 0, strength = 0, focus = 0;
+    float hp = 0, max_hp = 0, strength = 0, focus = 0, camp_multiplier = 1;
+    float shield_value = 0, available_shield = 0;
     int attack_range = 1, width = 0, height = 0;
     std::vector<std::uint16_t> altar_values, home_values;
     bool boss_only = false;
@@ -68,6 +83,9 @@ class Bot {
     cambc::bitboard blocked(bool avoid_danger = false) const;
     cambc::bitboard group_goals(int group) const;
     bool navigate(cambc::bitboard goals, bool dash = true, bool avoid_danger = false);
+    bool cross_obstacle(const cambc::bitboard& goals);
+    bool tactical_step(cambc::vec2 goal, bool flee = false);
+    void wake_group(int group);
     bool bank();
     bool escape();
     bool engage();

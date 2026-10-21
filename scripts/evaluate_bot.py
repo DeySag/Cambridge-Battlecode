@@ -40,6 +40,12 @@ def main():
     source_files = sorted((candidate_root / 'src').rglob('*'))
     source_hashes = {str(p.relative_to(candidate_root)): hashlib.sha256(p.read_bytes()).hexdigest()
                      for p in source_files if p.is_file()}
+    opponent_root = Path(args.opponent)
+    if not opponent_root.is_absolute():
+        opponent_root = ROOT / 'bots' / opponent_root
+    opponent_hashes = {str(p.relative_to(opponent_root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                       for p in sorted((opponent_root / 'src').rglob('*')) if p.is_file()}
+    cli_version = subprocess.check_output([cli, '--version'], text=True).strip()
     maps = args.maps or sorted(p.stem for p in (ROOT / 'maps').glob('*.map26a'))
     if not maps or args.jobs < 1:
         parser.error('at least one map and one worker are required')
@@ -65,6 +71,12 @@ def main():
                 result['error'] = 'runner failed or did not produce a completed match summary'
                 return result
             summary = json.loads(statistics.read_text())
+            if summary['match']['outcome'] not in ('teamA', 'teamB'):
+                result['error'] = 'match did not reach a terminal team outcome'
+                return result
+            if not summary['diagnostics'].get('detailedCaptureComplete', False):
+                result['error'] = 'native statistics capture is incomplete'
+                return result
             team = 'teamA' if side == 'A' else 'teamB'
             other = 'teamB' if side == 'A' else 'teamA'
             result.update(
@@ -72,6 +84,9 @@ def main():
                 outcome=summary['match']['outcome'],
                 rounds=summary['match']['roundsStarted'],
                 seed=summary['match']['seed'],
+                engine_version=summary['match']['engineVersion'],
+                engine_build_hash=summary['match']['engineBuildHash'],
+                map_hash=summary['match']['mapHash'],
                 gems={x['team']: int(x['submittedGems']) for x in summary['teams']},
                 crashes=summary['diagnostics']['botFaults'][team],
                 deaths=sum(int(x['metrics']['deaths']) for x in summary['champions'] if x['team'] == team),
@@ -86,6 +101,10 @@ def main():
                 totals['conversion'] = (totals['submittedGems'] / totals['collectedGems']
                                         if totals['collectedGems'] else None)
                 result[label] = totals
+                for metric in ['earnedGold', 'monsterDamageDone', 'monsterDamageTaken',
+                               'championDamageDone', 'championDamageTaken',
+                               'healingDone', 'healingReceived', 'shieldingDone']:
+                    totals[metric] = sum(float(c[metric]) for c in champions)
                 if totals['collectedGems'] != totals['submittedGems'] + totals['gems'] + totals['lostGems']:
                     result['error'] = f'{label} gem accounting does not reconcile'
                     return result
@@ -95,10 +114,14 @@ def main():
                 return result
             with zipfile.ZipFile(replay[1].strip()) as archive:
                 log = archive.read('team-a.stdout' if side == 'A' else 'team-b.stdout').decode(errors='replace')
+                enemy_log = archive.read('team-b.stdout' if side == 'A' else 'team-a.stdout').decode(errors='replace')
             result['caught_errors'] = re.findall(r'bot error[^\n\x00]*', log)
+            result['enemy_caught_errors'] = re.findall(r'bot error[^\n\x00]*', enemy_log)
+            result['enemy_crashes'] = summary['diagnostics']['botFaults'][other]
             result['fuel_suspensions'] = sum(len(event['entries']) for event in summary['events']
                                              if event['kind'] == 'fuelExhausted' and event['owner'].get('team') == team)
-            result['valid'] = not result['crashes'] and not result['caught_errors']
+            result['valid'] = (not result['crashes'] and not result['caught_errors']
+                               and not result['enemy_crashes'] and not result['enemy_caught_errors'])
             print(f"{key}: {'WIN' if result['win'] else 'LOSS'} "
                   f"{result['gems'][team]}:{result['gems'][other]} "
                   f"round {result['rounds']} errors={len(result['caught_errors'])} "
@@ -111,9 +134,16 @@ def main():
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as executor:
         results = list(executor.map(match, pairs))
     report = {'candidate': args.candidate, 'opponent': args.opponent,
-              'sdk': (ROOT / 'cambc.toml').read_text(), 'candidate_sources_sha256': source_hashes,
+              'sdk': (ROOT / 'cambc.toml').read_text(), 'cli_version': cli_version,
+              'candidate_sources_sha256': source_hashes, 'opponent_sources_sha256': opponent_hashes,
               'wins': sum(x['win'] for x in results), 'games': len(results),
               'invalid': sum(not x['valid'] for x in results), 'results': results}
+    for root, expected in [(candidate_root, source_hashes), (opponent_root, opponent_hashes)]:
+        current = {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+                   for p in sorted((root / 'src').rglob('*')) if p.is_file()}
+        if current != expected:
+            report['source_changed_during_run'] = True
+            report['invalid'] = len(results)
     (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
     print(f"{report['wins']}/{report['games']} wins; {report['invalid']} invalid checks. Report: {output / 'report.json'}")
     return int(report['invalid'] != 0)

@@ -6,9 +6,9 @@ These notes summarize the two organiser documents supplied by the user for event
 announcements, retained in [PATCH-NOTES.md](PATCH-NOTES.md), covering Heart of
 Ruin, Stellar, Ren, Vesper Vale, Vendetta, Tavi, Prism and the 24-hour invalid-bot
 grace period. Those announcements take precedence for the affected values in
-the historical exports. The project is still pinned to SDK 2.2.5; these notes do
-not establish that its engine implements the announced changes. Publication
-dates and the corresponding SDK version were not supplied.
+the historical exports. The project now uses SDK/CLI **3.0.4**; the follow-up
+below records checks against its engine. Announcement publication dates were
+not supplied.
 
 - `GameRules.md`: complete game rules and champion specifications.
 - `BotAPICpp.md`: full C++ API export, signatures, semantics and illustrative fragments.
@@ -155,3 +155,27 @@ The supplied documents remain unchanged snapshots. Consult the current checked-i
 The local 2.2.5 engine returned monolith attack range **3** through SDK design queries. Range-four spell farming was then exercised in full matches on `contest`, reaching 1,000 submitted gems. This resolves that range discrepancy for the tested version only. The bot uses awake/asleep observations to avoid treating dormant monsters as active threats during recall.
 
 Use `cambc build ... --release` and `cambc run ... --release` for submission checks. The updated SDK has debug-only fuel-pause helpers; platform builds omit them. The competition bot does not use those helpers for its decisions.
+
+
+## SDK 3.0.4 follow-up — 21 October 2026
+
+At the user's request, the checked-in SDK was refreshed from a project created
+by the official CLI 3.0.4. The SDK files are organiser code, not strategy changes.
+The runtime is engine **1.0.2**, matching the four supplied ranked replay groups.
+The earlier 2.2.5 observations above are historical and must not be used as
+current balance values.
+
+Runtime design queries confirm Heart of Ruin is a distinct draft/champion enum:
+Health 1000, Strength 30, Focus 100; shard growth 100 / 3.5 / 12. Its shield is
+1.5 × Focus, and its range-two dash deals 1.5 × Focus within radius one and
+stuns for one turn. Stellar is 650 / 30 / 70 with growth 65 / 3.5 / 7. Ren's
+stun deals 0.75 × Focus. Vesper Vale is 1000 / 55 / 100; Vendetta Health is
+1000; Tavi Health/Focus are 900 / 110. Prism's SDK passive constant is
+**1.5 Focus per carried gem**. These agree with the supplied latest patch notes.
+
+The engine reports monolith attack range **5**. Four-tile spell farming cannot
+avoid monolith retaliation. Gem and gold clusters have **120 Health**, and the
+SDK includes golems. Camp design/range and live ability metadata are queried
+instead of restoring historical hardcoded assumptions. Final bot comparisons
+must be rebuilt and run in release mode on this runtime; v2 benchmark results
+remain evidence for their recorded earlier runtime only.

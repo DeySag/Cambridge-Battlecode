@@ -1,0 +1,21 @@
+{
+  "origin": "Sprint 1-derived pressure-caster fixture, independently modified for physical aggression; not a submitted arena opponent",
+  "runtime": "SDK/CLI 3.0.4, engine 1.0.2",
+  "sha256": "ca60cce1bf147c04df4ab85f30046ddeeae1ea68b60c49fb1279abfabba72401",
+  "source_sha256": {
+    "src/bot.cpp": "f0985da439180bccf2071fd44901b91d2e83fd08854d39f3c5a7003d45605b82",
+    "src/bot.h": "a7269a8836dc62668e68873e762b1b6afa204c35d73e4fd29a14f8e093919706",
+    "src/draft.cpp": "59a4911a9c04cee7035fa9e6a3a2b5957641c6da9592c5d214a878d8c2979dae",
+    "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+    "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
+    "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
+  },
+  "changes": [
+    "Marcella / Varg / Tavi / Heart of Ruin / Vesper draft on ordinary maps; Varg / Tavi / Heart / Marcella / Vesper on boss maps",
+    "First five Jungle damage shards, then three Bruiser Health per five damage shards; Heart buys Focus, others Strength",
+    "Healthy aggressive pursuit and damaging Heart dash",
+    "Terrain routes may approach occupied camp tiles",
+    "Exclude zero-distance dashes, refresh landing occupancy after hidden blockage, and check visibility before camp group live-state queries"
+  ],
+  "validation": "Corrected fixture: 68 full games against v2, zero bot faults or caught API errors on either side. Earlier fixture trials with API errors were rejected."
+}

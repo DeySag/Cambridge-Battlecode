@@ -1,5 +1,19 @@
 # Submission bundles
 
+## v3 — patched SDK
+
+[`v3-patched-sdk-bot.zip`](v3-patched-sdk-bot.zip) contains the current source-only
+bot for **SDK/CLI 3.0.4, engine 1.0.2**. All 34 checked-in maps were tested from
+both positions against three opponents (204 games). Extraction, rebuild and
+12 further matches verified this exact ZIP, with no faults or caught API errors
+on either team. See [the measured results and limitations](../tests/results/v3/README.md).
+
+SHA-256: `f6ff205e76ac4de8ea3bc623661a395633de9abe6232a9c19662014d02d609de`
+
+The archive contains exactly `src/bot.cpp`, `src/bot.h`, `src/draft.cpp`,
+`src/draft.h`, `src/main.cpp` and `src/random.h`. Download the ZIP as a raw file
+for submission; the prepared bundle does not establish an arena upload.
+
 ## v2 — Sprint 2
 
 `v2-sprint-2-bot-update.zip` contains the v2 source submission for SDK 2.2.5.

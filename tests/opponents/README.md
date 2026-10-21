@@ -1,7 +1,8 @@
 # Reproducible pressure opponents
 
 These source ZIPs are test fixtures derived from the preserved Sprint 1 bot.
-Use SDK/CLI 2.2.5 and the checked-in maps. They are not ranked opponents, and
+The v2 results used SDK/CLI 2.2.5. For current v3 comparisons, rebuild these
+unchanged sources with SDK/CLI 3.0.4. They are not ranked opponents, and
 performance against them does not predict tournament Elo.
 
 - `pressure-caster.zip`: drafts Stellar, Cassi/Issac, Varg, Ryth and Tavi;
@@ -29,3 +30,21 @@ Extract `submissions/v1-sprint-1-bot-update.zip` into `bots/sprint1` to reproduc
 the preserved baseline as another opponent. The evaluator output directory
 must be new for each run. Reports record candidate source hashes, map seeds
 and diagnostics; archived final reports live under `tests/results/v2/`.
+
+
+## Patched-runtime bruiser fixture
+
+[`v3/bruiser-pressure.zip`](v3/bruiser-pressure.zip) is an independent Sprint 1
+derivative with a durable physical draft, Jungle opening, Bruiser Health,
+aggressive pursuit and Heart of Ruin dash damage. The complete source hashes
+and changes are in [`v3/PROVENANCE.json`](v3/PROVENANCE.json). Build it with
+SDK/CLI 3.0.4. It retains deliberately simple strategy, can overcommit and does
+not represent a ranked opponent. It complements the ranged pressure fixture.
+
+Use the same extraction commands above with `v3/bruiser-pressure.zip` and a new
+`bots/bruiser-pressure` directory. Extract the frozen v2 comparison opponent
+from `submissions/v2-sprint-2-bot-update.zip`. Current final reports and exact
+source checksums are under `tests/results/v3/`. Both teams' caught API errors
+and native bot faults are checked by the current evaluator. An early bruiser
+fixture contained invalid dash/visibility calls; it was fixed and those earlier
+comparisons were excluded.
