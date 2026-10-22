@@ -4,7 +4,7 @@ The frozen source in `bots/baseline/src` was rebuilt and tested using organiser
 **SDK/CLI 3.0.4, engine 1.0.2**, release mode. All **34 checked-in maps** were
 played from both positions against each opponent: **204 completed games**.
 A separately extracted and rebuilt submission ZIP completed another 12 games.
-The sources match [`VALIDATION.json`](../../../bots/baseline/VALIDATION.json)
+The sources match [`VALIDATION.json`](VALIDATION.json)
 and the ZIP in all 216 final games. Neither team had any native bot faults or
 caught API errors. Both teams' gem accounts reconcile in every game.
 

@@ -112,3 +112,12 @@ The compatibility caveats immediately above describe the earlier documentation
 commit, not the current project. Current runtime checks and the monolith range
 change are recorded in [READING-NOTES.md](READING-NOTES.md#sdk-304-follow-up--21-october-2026).
 The original announcements and preserved v1/v2 source bundles remain unchanged.
+
+
+### Runtime follow-up — 22 October 2026
+
+The new replay batch uses organiser engine **1.0.3**. The targeted bot revision
+now pins official SDK/CLI **3.0.5** and compares frozen v3 and revised source
+on that same runtime. This is a compatibility/validation record, not an additional
+organiser balance announcement; the supplied patch announcements above remain
+unchanged.

@@ -280,7 +280,7 @@ bool Bot::navigate(bc::bitboard goals, bool dash, bool avoid_danger) {
         if (blocked_turns >= 3) path_walls |= walls & ~bc::vision::camp_tiles();
         route_field.compute_to(path_walls, free_goals, around(position, 0), route_visited);
         route_round = round; route_avoid_danger = avoid_danger; route_valid = true;
-        if (!has_budget(5500)) return false;
+        if (!has_budget(5500)) return true; // Completed planning is useful even if its frame crossed a turn.
     }
     if (!route_visited.is_set(position)) {
         route_valid = false;
@@ -637,7 +637,9 @@ bool Bot::bank() {
         for (auto tile : (around(altar, bc::constants::submit_gems_range) & ~terrain).positions())
             if (enemy_pressure(tile, 2) < protection() * 0.6f) goals.set(tile);
     }
-    if (!navigate(goals, true, !enemies.empty())) {
+    const bool progressed = navigate(goals, true, !enemies.empty());
+    if (!has_budget(6000) || !me.is_alive()) return true;
+    if (!progressed) {
         bank_altar = {-1, -1};
         if (enemy_pressure(position, 2) > 0) escape();
         else if (!enemies.empty()) retreat();
@@ -652,6 +654,20 @@ bool Bot::escape() {
     stage = "escape";
     auto& me = bc::self();
     if (!has_budget(10000) || !me.is_alive()) return false;
+    // Cast an exclusive targeted stun before spending movement: walking first
+    // can otherwise make a ranged defender unable to stop its pursuer.
+    if (!moved && enemies.size() <= 2 && me.can_cast()) {
+        for (const auto& ability : me.abilities()) {
+            if (!has_budget(11000)) break;
+            if (!ability.is_cc() || !ability.can_target_enemies() || !ability.is_ready()) continue;
+            const auto legal = ability.valid_tiles();
+            const Enemy* pursuer = nullptr;
+            for (const auto& enemy : enemies)
+                if (!enemy.stunned && legal.is_set(enemy.position) && enemy.view.is_visible() && enemy.view.is_alive()
+                    && (!pursuer || enemy.strength > pursuer->strength)) pursuer = &enemy;
+            if (pursuer && has_budget(6500) && me.is_alive() && me.can_cast() && ability.use(pursuer->view)) break;
+        }
+    }
     // A shield is compatible with walking. Prefer it before taking another hit.
     for (const auto& ability : me.abilities())
         if (me.can_cast() && ability.is_shield() && ability.is_ready()
@@ -1026,7 +1042,7 @@ void Bot::play_turn() {
         bank_altar = {-1, -1}; bank_plan_round = -100;
         if (hp > max_hp * 0.55f) recovering = false;
         last_progress = round;
-        if (banking && enemy_pressure(position, 2) == 0 && round - last_recall > 30 && !spawn) {
+        if (enemy_pressure(position, 2) == 0 && incoming(position) == 0 && round - last_recall > 30 && !spawn) {
             me.recall(); last_recall = round; return;
         }
     }

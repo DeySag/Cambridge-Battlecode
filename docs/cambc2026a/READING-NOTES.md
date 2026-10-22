@@ -179,3 +179,14 @@ SDK includes golems. Camp design/range and live ability metadata are queried
 instead of restoring historical hardcoded assumptions. Final bot comparisons
 must be rebuilt and run in release mode on this runtime; v2 benchmark results
 remain evidence for their recorded earlier runtime only.
+
+
+## SDK 3.0.5 follow-up — 22 October 2026
+
+The latest supplied losses use engine **1.0.3**. CLI/SDK **3.0.5** provides the
+matching runtime and is now the project pin. All official SDK and CMake files
+match a fresh CLI 3.0.5 project; no local SDK changes were introduced. The C++
+header difference from 3.0.4 is documentation of drawing lifetimes. SDK changes
+also include Rust design accessors; consult the actual checked-in SDK.
+V3 and v4 were rebuilt on this same runtime for the new comparisons. The earlier
+1.0.2 results remain historical, tied to the preserved v3 ZIP/validation.

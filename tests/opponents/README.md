@@ -48,3 +48,23 @@ source checksums are under `tests/results/v3/`. Both teams' caught API errors
 and native bot faults are checked by the current evaluator. An early bruiser
 fixture contained invalid dash/visibility calls; it was fixed and those earlier
 comparisons were excluded.
+
+
+## v4 control-pressure fixture
+
+[`v4/control-pressure.zip`](v4/control-pressure.zip) is derived from the frozen
+v3 submission, independently of the developing v4 source. It drafts Heart,
+Vendetta, Ryth, Vesper and Ren and buys Power damage from the opening with three
+Bruiser Health per five damage shards. The other v3 behavior remains frozen,
+including its limitations. It exercises the control-heavy physical openings seen
+in the new losses; it does not reconstruct an unknown ranked opponent.
+[`v4/PROVENANCE.json`](v4/PROVENANCE.json) records the exact source and ZIP hashes.
+Use SDK/CLI 3.0.5. Reference v3 and final v4 both completed the full 49-map pool
+from both sides against the same fixture; see `tests/results/v4/`.
+
+
+[`v4/duelist-pressure.zip`](v4/duelist-pressure.zip) is the corrected bruiser
+fixture with a Vendetta/Vesper/Prism/Ryth/Varg opening and Focus equipment on
+Prism. Its exact hashes and limited 12-game check scope are in
+[`v4/duelist-PROVENANCE.json`](v4/duelist-PROVENANCE.json). Other corrected
+bruiser behavior is retained. Both v3 and v4 scored 9/12 in that focused check.

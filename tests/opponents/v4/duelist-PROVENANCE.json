@@ -1,0 +1,19 @@
+{
+  "origin": "Frozen corrected Sprint 1-derived bruiser-pressure fixture; independently modified before the final comparison",
+  "runtime": "SDK/CLI 3.0.5, engine 1.0.3",
+  "zip_sha256": "858dd7b59c17027f8421028c5d5d14b6cff1cf5ffa17f036774cd636e0a810ee",
+  "source_sha256": {
+    "src/bot.cpp": "ad86e1945e6481b4aabd278f8fe8f12afa3fb142fa6b026d5a801a4f5ccc1830",
+    "src/bot.h": "a7269a8836dc62668e68873e762b1b6afa204c35d73e4fd29a14f8e093919706",
+    "src/draft.cpp": "f65b0d45be364086f9d1b85287af203d44d0aa60e30128a7e8ce1d5cb41975f6",
+    "src/draft.h": "15ddeaeb4ab39f6e3e80647fad56de9c0da7fc728d4c24ca83475060703a7bfd",
+    "src/main.cpp": "2bf3ecd51757ee8fa6f61ecddb2fbdcc7f4c0679553283b07ce235406b01758a",
+    "src/random.h": "5ae547e5a1686c12e00be206016fef798691db1da563adb3ed83fce355284910"
+  },
+  "changes": [
+    "Vendetta / Vesper / Prism / Ryth / Varg draft on all maps",
+    "Prism buys Focus; other champions buy Strength",
+    "Other corrected bruiser-pressure behavior and Jungle/Bruiser equipment pattern retained"
+  ],
+  "scope": "Focused 12-game regression check of the Vendetta/Vesper/Prism opening seen in the new losses; not a reconstruction of the unknown ranked opponent."
+}

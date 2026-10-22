@@ -1,92 +1,69 @@
-# v3 — durable economy and contested objectives
+# v4 — targeted failure-case fixes
 
-C++ bot for organiser **SDK/CLI 3.0.4, engine 1.0.2**. This replaces v2 after
-reviewing all 20 games in the four supplied losing series. See the
-[replay diagnosis](../../docs/diagnostics/2026-10-21-ranked-review.md) and
-[final measured results](../../tests/results/v3/README.md). The organiser's
-[patch announcements](../../docs/cambc2026a/PATCH-NOTES.md) and earlier v1/v2
-source ZIPs remain preserved.
+C++ source bot for organiser **SDK/CLI 3.0.5, engine 1.0.3**. This is a focused
+revision of v3 after reviewing 20 recent games supplied at approximately 1690
+Elo and the preceding post-release failure notes. See the
+[diagnosis](../../docs/diagnostics/2026-10-22-ranked-review.md) and
+[measured results](../../tests/results/v4/README.md).
 
-## Strategy
+## Changes from v3
 
-- **Durable draft.** Ordinary maps open Varg then Tavi on dense camp layouts,
-  reversing those two on sparse layouts; add Heart of Ruin, Marcella and Vesper
-  as the pick limit permits. Boss-only gem maps choose Varg, Tavi, Willow,
-  Heart and Marcella. This avoids linked deaths and builds a shielded frontline
-  with ranged support. Monolith range is queried from the current engine;
-  range-four spells no longer give safe boss farming.
-- **Build an economy before expensive fights.** Complete five Jungle damage
-  shards, then five Durability Health, then five Monster damage; later complete
-  Power damage blocks interleaved with Bruiser Health. Heart buys Focus, basic
-  attackers buy Strength. Tavi shops in the field. Jungle and Durability passives
-  reduce incoming damage; their benefits are not assumed to stack repeatedly.
-  Recall for healing or a meaningful purchase rather than each small reward.
-- **Farm and move with a purpose.** Rank camps by rewards, terrain distance,
-  clearing time, health cost, delivery cost, claims and remembered deaths.
-  Reserve groups in one shared byte per body. Cache routes and spread expensive
-  objective scoring across turns. Static routes can approach a corridor monster;
-  a blocked step can switch to clearing its group. Temporary unit blockages
-  permit detours. Disconnected components require a demonstrated legal dash or
-  a range-three teleport crystal crossing; portal planning is nonrecursive.
-- **Bound capture waits.** Waiting on a cleared camp is productive only briefly.
-  An unseen enemy anywhere in a long connected group can prevent capture. After
-  the capture window plus a margin, sweep toward the far side and fight its
-  defender. A separate watchdog discards stale objectives and route plans after
-  16 rounds without movement, gem change or combat progress.
-- **Take profitable nearby fights.** Compare visible friendly and hostile
-  health and damage before short pursuits. Use damage, stuns, splash, shields,
-  attack resets, heals and damaging dash landings. Basic attacks can select a
-  reachable enemy when the preferred spell target is outside basic range, while
-  retaining the engagement policy's carrier and survival filters. Exclude enemy
-  spawn targets. Ranged units may reset their attack allowance after walking.
-- **Survive retaliation and burst.** Include neighbouring visible awake camps,
-  not just the selected group. Mark groups awakened by attacks and splash.
-  Use shields before retaliation, refresh health after attacks, and evaluate
-  escape tiles against camp damage, enemy abilities, stuns and cooldowns.
-  Stay on allied spawn for recovery while still using available attacks/spells.
-- **Turn gems into score.** Usually bank at 75, or at 30 near an altar; exposed
-  smaller bags, a winning bag and the time limit trigger earlier delivery.
-  Compare actual altar routes, visible danger, locks and recent death sites.
-  Remove hostile locks, use attack resets where useful, and finish survivable
-  tribute channels because ordinary damage does not interrupt them.
-- **Respect fuel and visibility.** Live state is read only for visible units.
-  Life, round identity, action allowance and fuel are checked before actions.
-  A resumed computation cannot silently assume it is still the same turn.
+- **Preserve route planning across fuel pauses.** A completed distance search
+  may be useful even when its frame resumes in another turn. Banking preserves
+  that plan and defers the move, keeping the round/life/fuel/action guards.
+  It no longer repeatedly discards its route because planning crossed a turn.
+- **Recover stranded farmers.** After the progress watchdog fires, a unit away
+  from spawn can safely recall without needing to be banking or carry enough
+  shopping gold. Current and predicted visible damage must both be absent.
+- **Stun before retreating.** Against a small number of pursuers, consider a
+  legal, ready targeted stun before spending movement and disabling an exclusive
+  ranged spell. Remaining defenses and movement still obey the one-cast limit.
+- **Use mobile economy in three-pick teams.** Ordinary three-pick maps choose
+  Varg, Vesper Vale and Heart of Ruin. Vesper adds a dash, attack reset and bonus
+  gold. Four/five-pick ordinary drafts retain the v3 roster and density ordering.
+- **Use a control frontline on boss-only gem maps.** Choose Varg, Heart,
+  Marcella, Ryth and Vesper as picks permit. This replaces the earlier support
+  opening that repeatedly lost its economy under player pressure.
+
+The existing risk-adjusted camp scoring, route caches, eight-byte task
+reservations, camp obstruction clearing, bounded capture waits, legal transport,
+shield timing, carrier banking, altar-lock handling and combat filters remain.
+Item families and banking thresholds are those of v3. The SDK refresh is official organiser code, recorded separately.
 
 ## Build and reproduce
 
-Install organiser CLI 3.0.4 and use the checked-in SDK:
+Use CLI 3.0.5 and the checked-in SDK:
 
 ```sh
 cambc build baseline --release
-mkdir -p bots/v2 bots/pressure-caster bots/bruiser-pressure
-unzip submissions/v2-sprint-2-bot-update.zip -d bots/v2
+mkdir -p bots/v3 bots/pressure-caster bots/bruiser-pressure bots/control-pressure
+unzip submissions/v3-patched-sdk-bot.zip -d bots/v3
 unzip tests/opponents/pressure-caster.zip -d bots/pressure-caster
 unzip tests/opponents/v3/bruiser-pressure.zip -d bots/bruiser-pressure
-python3 scripts/evaluate_bot.py --candidate baseline --opponent v2 --output matches/new-v3-v2
-python3 scripts/evaluate_bot.py --candidate baseline --opponent pressure-caster --output matches/new-v3-caster
-python3 scripts/evaluate_bot.py --candidate baseline --opponent bruiser-pressure --output matches/new-v3-bruiser
+unzip tests/opponents/v4/control-pressure.zip -d bots/control-pressure
+python3 scripts/evaluate_bot.py --candidate baseline --opponent v3 --output matches/new-v4-v3
+python3 scripts/evaluate_bot.py --candidate baseline --opponent pressure-caster --output matches/new-v4-caster
+python3 scripts/evaluate_bot.py --candidate baseline --opponent bruiser-pressure --output matches/new-v4-bruiser
+python3 scripts/evaluate_bot.py --candidate baseline --opponent control-pressure --output matches/new-v4-control
 ```
 
-Each output directory must be new. By default the evaluator runs both positions
-on all **34 checked-in maps**: the original 17 plus 17 recovered from the uploaded
-replays and verified against official SHA-256 values. This covers every repo map,
-not the entire separately published 35-map pool. The evaluator rejects incomplete
-runs and API errors/crashes on either team, reconciles both gem accounts, and
-records source hashes, runtime/map hashes, seed, economy, deaths and fuel events.
+Every output directory must be new. The evaluator defaults to all **49 repository
+maps from both sides**, validates completed statistics and gem balances, and
+checks both teams for native faults and caught API errors. It records both source
+hashes, runtime/build hash, map hash, seed, economy and fuel suspensions.
+This covers the repo, not the entire separately published current map pool.
 
-## Validation and limits
+## Validation and remaining limits
 
-[`VALIDATION.json`](VALIDATION.json) ties the final source hashes to benchmark
-reports and the source-only ZIP. Archived reports and CSVs live under
-[`tests/results/v3`](../../tests/results/v3/README.md); full local replays and
-statistics are under ignored `matches/v3-final-*`. ZIP extraction, rebuild and
-separate match checks verify the deliverable rather than only the working tree.
+[`VALIDATION.json`](VALIDATION.json) ties the exact frozen source to report and
+submission ZIP checksums. The ZIP was extracted, rebuilt and tested separately;
+all corresponding scores, seeds and match lengths matched. Archived results
+and losses live in [`tests/results/v4`](../../tests/results/v4/README.md).
 
-These are deterministic local comparisons against independent hand-written
-fixtures. They do not predict ranked win rate or Elo. Enemy assessment is a
-short heuristic with partial vision, not a full combat search. Hidden defenders,
-multiple available enemy spells over several turns, failed transport, long
-contests and some close-range matchups remain risks. Fuel suspensions remain
-measured separately from bot faults. New arena replays should guide further
-changes; final validation reports document the losses as well as wins.
+Local fixed-seed fixture comparisons do not predict ranked Elo or win rate.
+Some boss matchups, economic races and control pressure remain weak. Replay
+checks still show individual island stationary runs up to 319 turns; universal
+stall freedom is not established. Multiple walking components and repeated
+transport planning remain priorities. Fuel pauses are substantially reduced
+in the comparisons but are still present. Preserve the immutable v3 ZIP and its
+[historical validation](../../tests/results/v3/VALIDATION.json) for further tests.

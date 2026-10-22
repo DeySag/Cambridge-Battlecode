@@ -1,5 +1,19 @@
 # Submission bundles
 
+## v4 — failure-case update
+
+[`v4-failure-case-update.zip`](v4-failure-case-update.zip) is the current source-only
+bot for **SDK/CLI 3.0.5, engine 1.0.3**. It preserves route plans across fuel
+pauses, adds safe stranded-unit recovery and stun-before-retreat handling, and
+adjusts three-pick and boss drafts. The frozen source completed 392 full-pool
+games, 16 ZIP extraction/rebuild games and 12 focused archetype games, with zero
+faults or caught API errors on either team. See [results and remaining limits](../tests/results/v4/README.md).
+
+SHA-256: `084d3ee511ed8502b157e3b679d763e719d9e4835f4569c4409abefed1656da9`
+
+The ZIP contains the six source files listed in the validation manifest.
+It is prepared for submission; an arena upload is a separate action.
+
 ## v3 — patched SDK
 
 [`v3-patched-sdk-bot.zip`](v3-patched-sdk-bot.zip) contains the current source-only
